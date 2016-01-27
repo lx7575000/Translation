@@ -1,0 +1,34 @@
+# （译）JSTips
+
+#1 数组元素插入 
+[源地址](https://github.com/loverajoel/jstips/blob/gh-pages/_posts/en/2015-12-29-insert-item-inside-an-array.md)
+向已存在的数组中插入元素已经成为日常了，你可以使用`push`方法想数组尾插入新元素，也可以`unshift`新元素到组头，或者应用`splice`方法把元素加入到数组中间。
+以上都是已知的方法，但是并不意味着没有更高效的方法。
+使用`push()`向数组添加新元素虽然简单，但并不是最高效的方法：
+
+```js
+var arr = [1,2,3,4,5];
+
+arr.push(6);
+arr[arr.length] = 6; // 43% faster in Chrome 47.0.2526.106 on Mac OS X 10.11.1
+```
+
+以上两种方法都改变了原数组，你不相信？可以去[jsperf](http://jsperf.com/push-item-inside-an-array)查看。
+现在，如果我们尝试在数组首部添加元素：
+
+```js
+var arr = [1,2,3,4,5];
+
+arr.unshift(0);
+[0].concat(arr); // 98% faster in Chrome 47.0.2526.106 on Mac OS X 10.11.1
+```
+
+**细节：** `unshift`修改原数组，`concat`通过复制参数数组内元素，返回一个新数组。
+在数组中间添加新元素，通常使用数组的`splice`方法，并且他是效率最高的方法。
+
+```js
+var items = ['one', 'two', 'three', 'four'];
+items.splice(items.length / 2, 0, 'hello');
+```
+
+以上几种我在多种浏览器和OS进行了测试，结果均相近。我希望这些小知识点能够帮助到你提升你的效率。
