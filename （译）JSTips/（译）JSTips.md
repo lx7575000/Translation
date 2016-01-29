@@ -55,3 +55,36 @@ $scope.$apply(() => {
 * 最好的效率是自身作用域被更新，如果仅仅是想更新当前作用域或子作用域，使用`$digest`方法，同时禁止全局进行digest循环。
 * `$apply()`方法是一个硬处理方法，并且当绑定过多时，会导致效率问题。
 * 如果你使用AngularJS 1.2.X版本，使用`$evalAsync`，它会在当前或下次循环时判断表达式值变化。可以有效提高应用整体效率。
+
+#3 React keys属性在子组件当中很重要
+在`React`当中，**key**属性是你一定要传入给所有相同类型动态创建并且以数组形式保存的子组件。`React`使用这些独一无二的常量*ID*来确认DOM中的各个子组件，并判断他们是否为相同类型组件。使用**key**属性可以用于判断子组件是否发生了变化，并防止奇怪的事情发生。
+
+[ Paul O’Shannessy](https://github.com/facebook/react/issues/1342#issuecomment-39230939)
+
+    key属性最重要的作用不是用于提升效率，它更关心的是确认子组件（这样反而会提高性能）。随机分配或者更改值不会产生一个identity。
+
+* 使用存在对象独一无二的属性作为**key**值。
+* 在父组件中就定义好所有子组件的**key**值。
+
+```js
+...
+render() {
+    <div key={{item.key}}>{{item.name}}</div>
+}
+...
+   
+//good
+<MyComponent key={{item.key}}/>
+```
+
+* [不要通过数组的map方法传入的**index**设定**key**值](https://medium.com/@robinpokorny/index-as-a-key-is-an-anti-pattern-e0349aece318#.jadd313vz)
+* `random()`在此不会起作用。
+
+```js
+//bad
+<MyComponent key={{Math.random()}}/>
+```
+
+* 可以使用适合你自己项目，并且快速的方法创建独一无二的**id**值
+* 当子组件很复杂或者数量较多的时候，使用**key**属性来提高你项目的效率。
+* 我们应该给[ReactCSSTransitionGroup](http://reactjs.cn/react/docs/animation.html)的子组件设**key**值
