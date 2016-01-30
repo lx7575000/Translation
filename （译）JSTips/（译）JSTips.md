@@ -82,9 +82,99 @@ render() {
 
 ```js
 //bad
+{todos.map((todo, index) =>
+  <Todo {...todo}
+    key={index} />
+)}
+```
+
+```js
+//bad
 <MyComponent key={{Math.random()}}/>
 ```
 
 * 可以使用适合你自己项目，并且快速的方法创建独一无二的**id**值
 * 当子组件很复杂或者数量较多的时候，使用**key**属性来提高你项目的效率。
 * 我们应该给[ReactCSSTransitionGroup](http://reactjs.cn/react/docs/animation.html)的子组件设**key**值
+
+#4 提高条件语句效率
+[原文地址](https://github.com/loverajoel/jstips/blob/gh-pages/_posts/en/2016-01-03-improve-nested-conditionals.md)
+
+我们如何提升JS中**if**语句的执行效率？
+
+```js
+if (color) {
+  if (color === 'black') {
+    printBlackBackground();
+  } else if (color === 'red') {
+    printRedBackground();
+  } else if (color === 'blue') {
+    printBlueBackground();
+  } else if (color === 'green') {
+    printGreenBackground();
+  } else {
+    printYellowBackground();
+  }
+}
+```
+
+首先，我们可以使用`switch`语句来替换提升`if`语句。尽管这么做会减少对条件顺序的要求以及多层嵌套的麻烦，但出于对**debug**困难程度的考虑我们仍不推荐这么做。
+
+```js
+switch(color) {
+  case 'black':
+    printBlackBackground();
+    break;
+  case 'red':
+    printRedBackground();
+    break;
+  case 'blue':
+    printBlueBackground();
+    break;
+  case 'green':
+    printGreenBackground();
+    break;
+  default:
+    printYellowBackground();
+}
+```
+
+但是假如我们存在一种在同一环境下需要对多条件进行判断时，如果我们想要减少啰嗦的语句，并且更有序。我们可以条件性`switch`。我们传入`true`作为`switch`语句，这么做可以让我们在每个`case`中进行条件判断。
+
+```js
+switch(true) {
+  case (typeof color === 'string' && color === 'black'):
+    printBlackBackground();
+    break;
+  case (typeof color === 'string' && color === 'red'):
+    printRedBackground();
+    break;
+  case (typeof color === 'string' && color === 'blue'):
+    printBlueBackground();
+    break;
+  case (typeof color === 'string' && color === 'green'):
+    printGreenBackground();
+    break;
+  case (typeof color === 'string' && color === 'yellow'):
+    printYellowBackground();
+    break;
+}
+```
+
+尽管这么做很爽，但是我们必须避免多条件判断的使用，尽可能减少对`switch`的使用。我们可以考虑通过使用**对象**来进行更高效的判断。
+
+```js
+var colorObj = {
+  'black': printBlackBackground,
+  'red': printRedBackground,
+  'blue': printBlueBackground,
+  'green': printGreenBackground,
+  'yellow': printYellowBackground
+};
+
+if (color in colorObj) {
+  colorObj[color]();
+}
+```
+
+[在此](http://www.nicoespeon.com/en/2015/01/oop-revisited-switch-in-js/)，你可以找到更多这方面的信息。
