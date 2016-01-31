@@ -178,3 +178,54 @@ if (color in colorObj) {
 ```
 
 [在此](http://www.nicoespeon.com/en/2015/01/oop-revisited-switch-in-js/)，你可以找到更多这方面的信息。
+
+#5 通过重度字符排序字符串
+JavaScript数组本身自带排序方法。当使用`array.sort()`时，会令数组内个元素按照字母表顺序进行排序。对于其他需求，你也可以定制自己的排序方法。
+
+```js
+['Shanghai', 'New York', 'Mumbai', 'Buenos Aires'].sort();
+// ["Buenos Aires", "Mumbai", "New York", "Shanghai"]
+```
+
+但是当你想使用非**ASCII**字符的方式进行排序*['é', 'a', 'ú', 'c']*这些字母，你会发现得到*['c', 'e', 'á', 'ú']*这样非常奇怪的结果。这是由于排序是按照英语的语言方式进行的。
+如下例子：
+
+```js
+// Spanish
+['único','árbol', 'cosas', 'fútbol'].sort();
+// ["cosas", "fútbol", "árbol", "único"] // bad order
+
+// German
+['Woche', 'wöchentlich', 'wäre', 'Wann'].sort();
+// ["Wann", "Woche", "wäre", "wöchentlich"] // bad order
+```
+
+幸运的是，ECMASScript的国际化API接口提供了[localeCompare](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare)和[Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator)两种方法克服这一问题。
+##使用`localeCompare()`方法
+
+```js
+['único','árbol', 'cosas', 'fútbol'].sort(function (a, b) {
+  return a.localeCompare(b);
+});
+// ["árbol", "cosas", "fútbol", "único"]
+
+['Woche', 'wöchentlich', 'wäre', 'Wann'].sort(function (a, b) {
+  return a.localeCompare(b);
+});
+// ["Wann", "wäre", "Woche", "wöchentlich"]
+```
+
+##使用`Intl.Collator()`方法
+
+```js
+['único','árbol', 'cosas', 'fútbol'].sort(Intl.Collator().compare);
+// ["árbol", "cosas", "fútbol", "único"]
+
+['Woche', 'wöchentlich', 'wäre', 'Wann'].sort(Intl.Collator().compare);
+// ["Wann", "wäre", "Woche", "wöchentlich"]
+```
+
+* 上述两种方法，你都可以自定义位置。
+* 根据*Firefox*浏览器的效率显示，比较大数目的字符串时**Intl.Collator**更快。
+
+因此，当你需要对非英语字符串进行数组排序时，切记使用上述方法进行排序以避免意想不到的排序结果。
