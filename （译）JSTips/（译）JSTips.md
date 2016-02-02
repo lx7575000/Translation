@@ -257,3 +257,48 @@ variable === null
 null == undefined //true
 null === undefined // false
 ```
+
+#7 懒人使用严格模式
+JavaScript的严格模式让开发者能够更容易的写出“安全”的代码。
+默认情况下，JavaScript允许程序员很粗心。比如，我们可以不使用`var`声明变量就进行使用。尽管对于一些无经验的初学者这么做很方便，**但是**当变量拼写错误或者在作用域外引用变量也会因此导致错误。
+开发者通常喜欢将枯燥的工作交给计算机来做，自动检查是否有错误。JavaScript的严格模式命令就是被用来检查JS错误的。
+
+我们可以将该命令添加在各个JS文件首部：
+
+```js
+// Whole-script strict mode syntax
+"use strict";
+var v = "Hi!  I'm a strict mode script!";
+```
+
+或者添加到函数当中：
+
+```js
+function f()
+{
+  // Function-level strict mode syntax
+  'use strict';
+  function nested() { return "And so am I!"; }
+  return "Hi!  I'm a strict mode function!  " + nested();
+}
+function f2() { return "I'm not strict."; }
+```
+
+通过包含上述命令在JS文件或函数中，我们就可以直接命令JavaScript引擎执行严格模式（通常在大多数大型JavaScript项目中是关闭的）。其中，严格模式通常会改变以下行为：
+  * 变量必须通过`var`声明后才能引用
+  * 尝试写入**只读**属性生成产生易被发现的错误
+  * 你必须通过`new`关键字执行构造函数
+  * **this**关键字不可以隐式绑定到全局对象
+  * 只允许有限的使用**eval()**
+  * 不允许使用保留字和未来保留字作为变量名
+
+在老项目中引入严格模式或许有些困难，因此新项目中推荐使用严格模式。如果你将所有JS文件引入一个大文件，此时会使所有文件都执行严格模式。
+严格模式的命令不是声明，只是字面表达式。通常会被早期JavaScript所忽略（个人感觉，目前没人会用ES5以前的版本了）。以下版本以上的浏览器开始支持严格模式：
+* Internet Explorer from version 10.
+* Firefox from version 4.
+* Chrome from version 13.
+* Safari from version 5.1.
+* Opera from version 12.
+
+
+
