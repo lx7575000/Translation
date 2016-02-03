@@ -300,5 +300,76 @@ function f2() { return "I'm not strict."; }
 * Safari from version 5.1.
 * Opera from version 12.
 
+#7 NodeList 转换成 数组
+[原文地址](https://github.com/loverajoel/jstips/blob/gh-pages/_posts/en/2016-01-08-converting-a-node-list-to-an-array.md)
 
+当我们使用`querySelectorAll`方法选择DOM节点时，通常会返回一个类似数组的对象**NodeList**。这种数据类型与数组类型很相似，但是却不具备数组自身的一些方法，比如`map`,`forEach`方法。现在我会介绍给你们一种快速、安全且可复用的方法将**NodeList**转回成为**Array**类型。
+
+```js
+const nodelist = document.querySelectorAll('div');
+const nodelistToArray = Array.apply(null, nodelist);
+
+//later on ..
+
+nodelistToArray.forEach(...);
+nodelistToArray.map(...);
+nodelistToArray.slice(...);
+
+//etc...
+```
+
+通过`apply`方法将以数组形式传入的参数传给函数，添加到其作用域`this`。MDN表示，`apply`会得到`querySelectorAll`返回的类数组对象。因为我们在此函数方法中并不需要特定的作用域`this`指向，因此我们传递`null`或者0作为参数。**最后返回的结果是包含所有`NodeList`中DOM元素的真实数组，这下我们可以使用数组方法了。**
+
+另，如果你使用ES6语法的话，可以直接使用[spread operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator)
+
+```js
+const nodelist = [...document.querySelectorAll('div')]; // returns a real array
+
+//later on ..
+
+nodelist.forEach(...);
+nodelist.map(...);
+nodelist.slice(...);
+
+//etc...
+```
+
+#8 `template strings`
+自从ES6发布后，JS现在可以使用**模板字符串**替换传统的**引用字符串**了。
+
+```js
+//栗子： 普通字符串
+var firstName = 'Jake';
+var lastName = 'Rawr';
+console.log('My name is ' + firstName + ' ' + lastName);
+// My name is Jake Rawr
+
+//Template String
+var firstName = 'Jake';
+var lastName = 'Rawr';
+console.log(`My name is ${firstName} ${lastName}`);
+// My name is Jake Rawr
+```
+
+通过模板字符串，你可以不使用"\n"创建多行字符串，在`${}`中写入简单的逻辑表达式(ie 2+3)。
+你也可以通过函数方法更改输出模板字符串：[标签模板字符串](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/template_strings#Tagged_template_strings)
+
+```js
+var a = 5;
+var b = 10;
+
+function tag(strings, ...values) {
+  console.log(strings[0]); // "Hello "
+  console.log(strings[1]); // " world "
+  console.log(values[0]);  // 15
+  console.log(values[1]);  // 50
+
+  return "Bazinga!";
+}
+
+tag`Hello ${ a + b } world ${ a * b}`;
+// "Bazinga!"
+```
+
+[更多相关资料，请点击here](https://hacks.mozilla.org/2015/05/es6-in-depth-template-strings-2)
 
