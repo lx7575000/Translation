@@ -373,3 +373,47 @@ tag`Hello ${ a + b } world ${ a * b}`;
 
 [更多相关资料，请点击here](https://hacks.mozilla.org/2015/05/es6-in-depth-template-strings-2)
 
+#9 判别某值是否在对象当中
+当你需要去判断某一对象中是否有某一值时，你很可能是如下做法：
+
+```js
+var myObject = {
+  name: '@tips_js'
+};
+
+if (myObject.name) { ... }
+```
+
+这样做虽然没错，但是你需要知道两种更原生的方法可以令你做这件事更容易:`in`操作符和`Object.hasOwnProperty`。每个继承自`Object`的对象都可以使用。
+## 不同之处
+
+```js
+var myObject = {
+  name: '@tips_js'
+};
+
+myObject.hasOwnProperty('name'); // true
+'name' in myObject; // true
+
+myObject.hasOwnProperty('valueOf'); // false, valueOf is inherited from the prototype chain
+'valueOf' in myObject; // true
+```
+
+上述两种方法在检查属性时各有不同。换句话说，`hasOwnProperty`会在当前对象**本身**具有该属性时返回true。然而，`in`操作符不会区别属性是属于当前对象本身还是继承自其原型链。
+
+**下面有个栗子**
+
+```js
+var myFunc = function() {
+  this.name = '@tips_js';
+};
+myFunc.prototype.age = '10 days';
+
+var user = new myFunc();
+
+user.hasOwnProperty('name'); // true
+user.hasOwnProperty('age'); // false, because age is from the prototype chain
+```
+
+[实时演示例子](https://jsbin.com/tecoqa/edit?js,console)
+推荐你阅读这个关于判别对象属性常见错误的[讨论](https://github.com/loverajoel/jstips/issues/62)
