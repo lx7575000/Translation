@@ -417,3 +417,85 @@ user.hasOwnProperty('age'); // false, because age is from the prototype chain
 
 [实时演示例子](https://jsbin.com/tecoqa/edit?js,console)
 推荐你阅读这个关于判别对象属性常见错误的[讨论](https://github.com/loverajoel/jstips/issues/62)
+
+#9 提升(hoisting)
+
+[原文位置](https://github.com/loverajoel/jstips/blob/gh-pages/_posts/en/2016-01-11-hoisting.md)
+
+理解[提升](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var#var_hoisting)能够更好的帮助你组织函数的作用域。切记，在最开始声明变量和定义函数。变量定义和声明并不是一回事，尽管你能将它们同时执行在同一行中。声明会令系统知道变量的存在，而定义仅仅只是赋值操作而已。
+
+```js
+function doTheThing() {
+  // ReferenceError: notDeclared is not defined
+  console.log(notDeclared);
+
+  // Outputs: undefined
+  console.log(definedLater);
+  var definedLater;
+
+  definedLater = 'I am defined!'
+  // Outputs: 'I am defined!'
+  console.log(definedLater)
+
+  // Outputs: undefined
+  console.log(definedSimulateneously);
+  var definedSimulateneously = 'I am defined!'
+  // Outputs: 'I am defined!'
+  console.log(definedSimulateneously)
+
+  // Outputs: 'I did it!'
+  doSomethingElse();
+
+  function doSomethingElse(){
+    console.log('I did it!');
+  }
+
+  // TypeError: undefined is not a function
+  functionVar();
+
+  var functionVar = function(){
+    console.log('I did it!');
+  }
+}
+```
+
+为了令代码阅读清楚些，在函数方法的最开始声明所有需要用到的变量方法，这样可以更清楚的了解各个变量的作用域。声明变量在应用之前，定义函数方法在最后，令其更清晰。
+
+#10  ES6函数中的默认参数
+[原文地址](https://github.com/loverajoel/jstips/blob/gh-pages/_posts/en/2016-01-12-pseudomandatory-parameters-in-es6-functions.md)
+
+许多编程语言中函数方法的参数在默认情况下是强制设定的，程序员必须**显示定义**参数为可选。在JS中函数参数是可选的，但是我们可以利用**ES6的默认参数值**特性，不用在函数体内做一系列复杂操作。
+
+```js
+const _err = function( message ){
+  throw new Error( message );
+}
+
+const getSum = (a = _err('a is not defined'), b = _err('b is not defined')) => a + b
+
+getSum( 10 ) // throws Error, b is not defined
+getSum( undefined, 10 ) // throws Error, a is not defined
+```
+
+`_err`函数会在`getSum`函数方法没有参数值传入时立即抛出异常。当然，你可以在[MDN](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/default_parameters)中看到关于默认参数值特性的例子。
+
+# 11 测量JS执行效率的小技巧
+[原文地址](https://github.com/loverajoel/jstips/blob/gh-pages/_posts/en/2016-01-13-tip-to-measure-performance-of-a-javascript-block.md)
+
+为了快速衡量JavaScript的性能，我们可以使用`console`方法比如`console.time(label)`和`console.timeEnd(label)`
+
+```js
+console.time("Array initialize");
+var arr = new Array(100),
+    len = arr.length,
+    i;
+
+for (i = 0; i < len; i++) {
+    arr[i] = new Object();
+};
+console.timeEnd("Array initialize"); // Outputs: Array initialize: 0.711ms
+```
+
+更多信息： [Console object](https://github.com/DeveloperToolsWG/console-object), [JavaScript benchmarking](https://mathiasbynens.be/notes/javascript-benchmarking)
+Demo: [jsfiddle](https://jsfiddle.net/meottb62/)-[codepen](http://codepen.io/anon/pen/JGJPoa)(在浏览器中console)
+
