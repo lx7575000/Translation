@@ -242,3 +242,89 @@ let today = new Date();
 let text = `The time and date is ${today.toLocaleString()}`;
 ```
 
+#5 重构
+重构方法允许我们使用更方便的方法，从数组或者对象中获取特定的属性或元素，并将它们存储在变量中。
+##重构数组
+
+```js
+var arr = [1, 2, 3, 4];
+var a = arr[0];
+var b = arr[1];
+var c = arr[2];
+var d = arr[3];
+let [a, b, c, d] = [1, 2, 3, 4];
+
+console.log(a); // 1
+console.log(b); // 2
+```
+
+##重构对象
+
+```js
+var luke = { occupation: 'jedi', father: 'anakin' };
+var occupation = luke.occupation; // 'jedi'
+var father = luke.father; // 'anakin'
+let luke = { occupation: 'jedi', father: 'anakin' };
+let {occupation, father} = luke;
+
+console.log(occupation); // 'jedi'
+console.log(father); // 'anakin'
+```
+
+#模块
+ES6之前，我们使用[Browserify](http://browserify.org/)等库在客户端创建模块，并且使用**Node.js**的[require](https://nodejs.org/api/modules.html#modules_module_require_id)库引用。在ES6中我们可以直接使用所有类型的模块(AMD 和 CommenJS)。
+
+## 使用CommonJS方式Export
+在ES6中，我们有多种方式传递出模块。通常使用**命名传递的形式**
+
+```js
+export let name = 'David';
+export let age  = 25;
+```
+
+**也可以使用基于对象列表的形式传出**
+
+```js
+function sumTwo(a, b) {
+    return a + b;
+}
+
+function sumThree(a, b, c) {
+    return a + b + c;
+}
+
+export { sumTwo, sumThree };
+```
+
+当然，简单的使用**`export`**关键字传出方法、对象和值。
+
+```js
+export function sumTwo(a, b) {
+    return a + b;
+}
+
+export function sumThree(a, b, c) {
+    return a + b + c;
+}
+```
+
+最后，还有`export default`**绑定**的方式
+
+```js
+function sumTwo(a, b) {
+    return a + b;
+}
+
+function sumThree(a, b, c) {
+    return a + b + c;
+}
+
+let api = {
+    sumTwo,
+    sumThree
+};
+
+export default api;
+```
+
+**最佳实践:** 在模块文件的最后使用`export default`方法。这么做可以让人很清楚明白传递的是什么方法、对象，并且可以避免费时判断各值的命名。CommonJS最常见做法为每次只传递出一个值或对象。坚持这种模式，我们可以使代码更易读，并且允许我们插入到CommonJS或ES6模块中

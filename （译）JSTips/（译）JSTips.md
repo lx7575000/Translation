@@ -300,7 +300,7 @@ function f2() { return "I'm not strict."; }
 * Safari from version 5.1.
 * Opera from version 12.
 
-#7 NodeList 转换成 数组
+#8 NodeList 转换成 数组
 [原文地址](https://github.com/loverajoel/jstips/blob/gh-pages/_posts/en/2016-01-08-converting-a-node-list-to-an-array.md)
 
 当我们使用`querySelectorAll`方法选择DOM节点时，通常会返回一个类似数组的对象**NodeList**。这种数据类型与数组类型很相似，但是却不具备数组自身的一些方法，比如`map`,`forEach`方法。现在我会介绍给你们一种快速、安全且可复用的方法将**NodeList**转回成为**Array**类型。
@@ -334,7 +334,7 @@ nodelist.slice(...);
 //etc...
 ```
 
-#8 `template strings`
+#9 `template strings`
 自从ES6发布后，JS现在可以使用**模板字符串**替换传统的**引用字符串**了。
 
 ```js
@@ -373,7 +373,7 @@ tag`Hello ${ a + b } world ${ a * b}`;
 
 [更多相关资料，请点击here](https://hacks.mozilla.org/2015/05/es6-in-depth-template-strings-2)
 
-#9 判别某值是否在对象当中
+#10 判别某值是否在对象当中
 当你需要去判断某一对象中是否有某一值时，你很可能是如下做法：
 
 ```js
@@ -418,7 +418,7 @@ user.hasOwnProperty('age'); // false, because age is from the prototype chain
 [实时演示例子](https://jsbin.com/tecoqa/edit?js,console)
 推荐你阅读这个关于判别对象属性常见错误的[讨论](https://github.com/loverajoel/jstips/issues/62)
 
-#9 提升(hoisting)
+#11 提升(hoisting)
 
 [原文位置](https://github.com/loverajoel/jstips/blob/gh-pages/_posts/en/2016-01-11-hoisting.md)
 
@@ -461,7 +461,7 @@ function doTheThing() {
 
 为了令代码阅读清楚些，在函数方法的最开始声明所有需要用到的变量方法，这样可以更清楚的了解各个变量的作用域。声明变量在应用之前，定义函数方法在最后，令其更清晰。
 
-#10  ES6函数中的默认参数
+#12  ES6函数中的默认参数
 [原文地址](https://github.com/loverajoel/jstips/blob/gh-pages/_posts/en/2016-01-12-pseudomandatory-parameters-in-es6-functions.md)
 
 许多编程语言中函数方法的参数在默认情况下是强制设定的，程序员必须**显示定义**参数为可选。在JS中函数参数是可选的，但是我们可以利用**ES6的默认参数值**特性，不用在函数体内做一系列复杂操作。
@@ -479,7 +479,7 @@ getSum( undefined, 10 ) // throws Error, a is not defined
 
 `_err`函数会在`getSum`函数方法没有参数值传入时立即抛出异常。当然，你可以在[MDN](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/default_parameters)中看到关于默认参数值特性的例子。
 
-# 11 测量JS执行效率的小技巧
+# 13 测量JS执行效率的小技巧
 [原文地址](https://github.com/loverajoel/jstips/blob/gh-pages/_posts/en/2016-01-13-tip-to-measure-performance-of-a-javascript-block.md)
 
 为了快速衡量JavaScript的性能，我们可以使用`console`方法比如`console.time(label)`和`console.timeEnd(label)`
@@ -498,4 +498,161 @@ console.timeEnd("Array initialize"); // Outputs: Array initialize: 0.711ms
 
 更多信息： [Console object](https://github.com/DeveloperToolsWG/console-object), [JavaScript benchmarking](https://mathiasbynens.be/notes/javascript-benchmarking)
 Demo: [jsfiddle](https://jsfiddle.net/meottb62/)-[codepen](http://codepen.io/anon/pen/JGJPoa)(在浏览器中console)
+
+#14 胖箭头函数
+作为ES6的新属性，使用胖箭头函数可以更方便的写出更简洁的代码。这个名字来源于其语法中的与`->`（瘦）相比的**`=>`（胖）**表达式。一些程序员可能已经在**Haskell**这类编程语言中了解了这种类型的**匿名函数**或**lambda表达式**。
+##箭头函数好处在哪？
+* 语法： 更少的代码行，不需要一遍遍的写`function`关键字
+* 语义： 自动绑定上层作用域`this`关键字。避免函数内莫名绑定到`window`。
+
+##简单小例子
+看看下面执行功能相同的代码片段，相信你会很快理解箭头函数的用法的。
+
+```js
+// general syntax for fat arrow functions
+// 正常箭头函数语法
+param => expression
+
+// may also be written with parentheses
+// parentheses are required on multiple params
+// 多函数的箭头函数
+(param1 [, param2]) => expression
+
+
+// using functions
+// ES5
+var arr = [5,3,2,9,1];
+var arrFunc = arr.map(function(x) {
+  return x * x;
+});
+console.log(arr)
+
+// using fat arrow
+// ES6
+var arr = [5,3,2,9,1];
+var arrFunc = arr.map((x) => x*x);
+console.log(arr)
+```
+
+## `this`绑定
+我们使用箭头函数的另一理由是其可以对`this`上下文关系的处理。在箭头函数中，我们不再需要担心`.bind(this)`或设定`that=this`。箭头函数会自动绑定上级词法作用域的`this`。
+
+```js
+// globally defined this.i
+this.i = 100;
+
+var counterA = new CounterA();
+var counterB = new CounterB();
+var counterC = new CounterC();
+var counterD = new CounterD();
+
+// bad example
+function CounterA() {
+  // CounterA's `this` instance (!! gets ignored here)
+  this.i = 0;
+  setInterval(function () {
+    // `this` refers to global object, not to CounterA's `this`
+    // therefore starts counting with 100, not with 0 (local this.i)
+    this.i++;
+    document.getElementById("counterA").innerHTML = this.i;
+  }, 500);
+}
+
+// manually binding that = this
+function CounterB() {
+  this.i = 0;
+  var that = this;
+  setInterval(function() {
+    that.i++;
+    document.getElementById("counterB").innerHTML = that.i;
+  }, 500);
+}
+
+// using .bind(this)
+function CounterC() {
+  this.i = 0;
+  setInterval(function() {
+    this.i++;
+    document.getElementById("counterC").innerHTML = this.i;
+  }.bind(this), 500);
+}
+
+// fat arrow function
+function CounterD() {
+  this.i = 0;
+  setInterval(() => {
+    this.i++;
+    document.getElementById("counterD").innerHTML = this.i;
+  }, 500);
+}
+```
+
+可以去[MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)了解更多箭头函数的内容，不同的语法选择可以来[这里](http://jsrocks.org/2014/10/arrow-functions-and-their-scope/)
+
+#15 `indexOf`用作包含条款最佳实践
+JavaScript本身默认没有判断**字符串或数组**是否包含子串及元素的方法。通常我们会这么做：
+
+```js
+var someText = 'javascript rules';
+if (someText.indexOf('javascript') !== -1) {
+}
+
+// or
+if (someText.indexOf('javascript') >= 0) {
+}
+```
+
+让我们看看[express.js](https://github.com/strongloop/express)的语法段。
+[examples/mvc/lib/boot.js](https://github.com/strongloop/express/blob/2f8ac6726fa20ab5b4a05c112c886752868ac8ce/examples/mvc/lib/boot.js#L26)
+
+```js
+for (var key in obj) {
+  // "reserved" exports
+  if (~['name', 'prefix', 'engine', 'before'].indexOf(key)) continue;
+```
+
+[lib/utils.js](https://github.com/strongloop/express/blob/2f8ac6726fa20ab5b4a05c112c886752868ac8ce/lib/utils.js#L93)
+
+```js
+exports.normalizeType = function(type){
+  return ~type.indexOf('/')
+    ? acceptParams(type)
+    : { value: mime.lookup(type), params: {} };
+};
+```
+
+[examples/web-service/index.js](https://github.com/strongloop/express/blob/2f8ac6726fa20ab5b4a05c112c886752868ac8ce/examples/web-service/index.js#L35)
+
+```js
+// key is invalid
+if (!~apiKeys.indexOf(key)) return next(error(401, 'invalid api key'));
+```
+
+相信你也注意到了，重点在于`~`操作符。按位操作符以二进制形式执行操作，但是返回标准JavaScript数据值。
+它会将将**-1**转化成**0**，并且**0**在JavaScript中表示**`false`**.
+
+```js
+var someText = 'text';
+!!~someText.indexOf('tex'); // someText contains "tex" - true
+!~someText.indexOf('tex'); // someText NOT contains "tex" - false
+~someText.indexOf('asd'); // someText doesn't contain "asd" - false
+~someText.indexOf('ext'); // someText contains "ext" - true
+```
+
+##`String.prototype.includes()`
+ES6引入[includes()方法](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes)你可以使用其判断字符串是否包含某个子串。
+
+```js
+'something'.includes('thing'); // true
+```
+
+在ES7中，你甚至可以将其应用到数组类型中
+
+```js
+//ES7
+!!~[1, 2, 3].indexOf(1); // true
+[1, 2, 3].includes(1); // true
+```
+
+很不幸，只用**Chrome, Firefox, Safari 9+及Edge**支持该语法，**IE11以下版本不支持**。推荐在可控环境下使用该方法。
 
