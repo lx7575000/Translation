@@ -781,3 +781,116 @@ var person = new Person("John");
 person.sayName().changeName("Timmy").sayName();
 ```
 
+#21 数组重组
+这个代码段使用了[Fisher-Yates Shuffling](https://www.wikiwand.com/en/Fisher%E2%80%93Yates_shuffle)算法重组已有数组。
+
+```js
+function shuffle(arr) {
+    var i,
+        j,
+        temp;
+    for (i = arr.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    return arr;    
+};
+//例子
+var a = [1, 2, 3, 4, 5, 6, 7, 8];
+var b = shuffle(a);
+console.log(b);
+// [2, 7, 8, 6, 5, 3, 1, 4]
+```
+
+#22 清空数组
+通常你定义数组并且希望内容清空，你可能会这么做：
+
+```js
+// define Array
+var list = [1, 2, 3, 4];
+function empty() {
+    //empty your array
+    list = [];
+}
+empty();
+```
+
+但是，这里有更高效的方法：
+
+```js
+var list = [1, 2, 3, 4];
+function empty() {
+    //empty your array
+    list.length = 0;
+}
+empty();
+```
+
+* `list = []`通过创建新数组进行赋值，然而这么做却不会对原数组内容产生影响。原数组内容仍存储在内存当中，可能会导致内存泄露。
+* `list.length = 0`删除数组内内容，这样会对其引用同时产生影响。
+
+换句话说，如果对同一数组进行了两次引用(`a=[1, 2, 3], a2 = a`)，并且你通过`list.length = 0`进行内容删除，两个引用(a 和 a2)都会为空。(因此，如果不希望产生影响，就别用上述技巧)。
+
+想想，下例会输出什么：
+
+```js
+var foo = [1,2,3];
+var bar = [1,2,3];
+var foo2 = foo;
+var bar2 = bar;
+foo = [];
+bar.length = 0;
+console.log(foo, bar, foo2, bar2);
+
+// [] [] [1, 2, 3] []
+```
+
+更多细节[difference-between-array-length-0-and-array](http://stackoverflow.com/questions/4804235/difference-between-array-length-0-and-array)
+
+#23 字符串 => 数值
+将**字符串类型**的数字变为**数值**很常见，最简单且迅速的方法建议使用**`+`**操作符。
+
+```js
+var one = '1';
+var numberOne = +one // Number 1
+```
+
+当然，**`-`** 操作符也行，但是这么做会令数值为**负**
+
+```js
+var one = '1';
+var negativeNumberOne = -one; // Number -1
+```
+
+#24 使用`===`代替`==`
+**`==`(或`!=`)操作符**会在需要的情况下**自动进行类型转换**。
+**`===`(或`!==`)操作符**不会进行类型转换。它只会比较值和类型，因此相对`==`操作符会执行更快。
+
+```js
+[10] ==  10      // is true
+[10] === 10      // is false
+
+'10' ==  10      // is true
+'10' === 10      // is false
+
+ []  ==  0       // is true
+ []  === 0       // is false
+
+ ''  ==  false   // is true but true == "a" is false
+ ''  === false   // is false 
+```
+
+#25 使用立即执行函数表达式
+立即执行函数表达式是缩写为IIFE(immediately invoked function expression)的匿名函数，它在JavaScript中有一些重要的作用。
+
+```js
+(function() {
+ // Do something
+ }
+)()
+```
+
+
+
