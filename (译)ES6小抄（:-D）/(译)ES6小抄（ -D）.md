@@ -328,3 +328,53 @@ export default api;
 ```
 
 **最佳实践:** 在模块文件的最后使用`export default`方法。这么做可以让人很清楚明白传递的是什么方法、对象，并且可以避免费时判断各值的命名。CommonJS最常见做法为每次只传递出一个值或对象。坚持这种模式，我们可以使代码更易读，并且允许我们插入到CommonJS或ES6模块中
+
+# ES6的`import`
+ES6为我们提供了许多导入模块的方法，我们可以使用其导入整文件。
+
+```js
+import 'underscore';
+```
+
+  > 需要提醒简单的整文件导入，会执行整个文件内的所有代码
+
+与python相似我们可以基于命名导入模块：
+
+```js
+import { sumTwo, sumThree } from 'math/addition';
+```
+
+我们也可以重命名导入的模块
+
+```js
+import {
+    sumTwo as addTwoNumbers,
+    sumThree as sumThreeNumbers
+} from 'math/addition';
+```
+
+除此之外，可以使用`*`引入所有模块（命名空间导入）
+
+```js
+import * as util from 'math/addition';
+```
+
+最后，我们可以通过像从模块中引入一系列值
+
+```js
+import * as additionUtil from 'math/addition';
+const { sumTwo, sumThree } = additionUtil;
+```
+
+当引入默认对象时，我们可以指定特定方法进行引用。
+
+```js
+import React from 'react';
+const { Component, PropTypes } = React;
+
+//简单方法
+import React, { Component, PropTypes } from 'react';
+```
+
+  > 注意： 导出的值是绑定不是引用。因此，改变模块内被绑定的变量将影响导出模块内的值。因此，避免更改导出这些值的公共接口。
+

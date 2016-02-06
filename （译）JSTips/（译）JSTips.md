@@ -656,3 +656,128 @@ ES6引入[includes()方法](https://developer.mozilla.org/en-US/docs/Web/JavaScr
 
 很不幸，只用**Chrome, Firefox, Safari 9+及Edge**支持该语法，**IE11以下版本不支持**。推荐在可控环境下使用该方法。
 
+#16 给回调函数传参
+默认情况下你没有办法给回调函数传递参数，比如：
+
+```js
+function callback() {
+  console.log('Hi human');
+}
+
+document.getElementById('someelem').addEventListener('click', callback);
+```
+
+可以利用JavaScript闭包作用域传递参数给回调函数。
+
+```js
+function callback(a, b) {
+  return function() {
+    console.log('sum = ', (a+b));
+  }
+}
+var x = 1, y = 2;
+document.getElementById('someelem').addEventListener('click', callback(x, y));
+```
+
+## 闭包是什么？
+闭包是指可以包含独立(自由)变量的函数。换句话说，定义在闭包中的函数’记住‘创建了它的上层作用域。去[MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures)了解更多。
+所以，通过闭包我们可以在回调函数被调用时将参数x和y传递给它。
+另外也可以通过`bind`方法传递给它。
+
+```js
+var alertText = function(text) {
+  alert(text);
+};
+
+document.getElementById('someelem').addEventListener('click', alertText.bind(this, 'hello'));
+```
+
+上述两种方法的效率仅仅有稍许区别，可以通过[jsperf](http://jsperf.com/bind-vs-closure-23)查看。
+
+#17 NodeJS 执行未`require`的模块
+根据你的代码是运行在`require('./something.js')`还是`node something.js`，你可以要求程序执行两种不同情况。如果你想与你的模块独立交互，这么做是非常有用的。
+
+```js
+if (!module.parent) {
+    // ran with `node something.js`
+    app.listen(8088, function() {
+        console.log('app listening on port 8088');
+    })
+} else {
+    // used with `require('/.something.js')`
+    module.exports = app;
+}
+```
+
+更多关于[模块](https://nodejs.org/api/modules.html#modules_module_parent)信息
+
+#18 舍入的快速方法
+今天的建议是关于效率的。[Ever came across the double tilde](http://stackoverflow.com/questions/5971645/what-is-the-double-tilde-operator-in-javascript)`~~` 操作符？同时也被称为双非操作符。你可以用其替换`Math.floor()`。
+一位转变`~`会将32位二进制数转换为`-(input+1)`。因此双非转变会将原数据变为`-(-(input+1)+1)`，使用其进行向下取整非常方便。对输入的数值使用`~~`操作符，模仿使用`math.ceil()`对负数取整，`Math.floor()`对正数取整。当失败返回0，与之相比`Math.floor()`方法失败返回的`Nan`简直非人类。
+
+```js
+// single ~
+console.log(~1337)    // -1338
+
+// numeric input
+console.log(~~47.11)  // -> 47
+console.log(~~-12.88) // -> -12
+console.log(~~1.9999) // -> 1
+console.log(~~3)      // -> 3
+
+// on failure
+console.log(~~[]) // -> 0
+console.log(~~NaN)  // -> 0
+console.log(~~null) // -> 0
+
+// greater than 32 bit integer fails
+console.log(~~(2147483647 + 1) === (2147483647 + 1)) // -> 0
+```
+
+尽管，`~~`可能效率更高，但是为了可读性更好最好还是使用`Math.floor()`
+
+#19 字符串安全连接
+你可能希望将多种不同类型的变量连接成字符串。可以肯定的是，应用算术操作符不一定都适用，因此推荐使用`concat`方法。
+
+```js
+var one = 1;
+var two = 2;
+var three = '3';
+
+var result = ''.concat(one, two, three); //"123"
+```
+
+应用`concat`可以准确达成你的需求，相比使用`+`操作符可能会产生预料之外的结果：
+
+```js
+var one = 1;
+var two = 2;
+var three = '3';
+
+var result = one + two + three; //"33" instead of "123"
+```
+
+关于效率问题，`join`方法和`concat`效率基本一致。
+
+#20 通过返回对象以实现函数链
+在面向对象的JavaScript中创建函数，函数内返回对象使你可以类似**JQuery**的函数链。
+
+```js
+function Person(name) {
+  this.name = name;
+
+  this.sayName = function() {
+    console.log("Hello my name is: ", this.name);
+    return this;
+  };
+
+  this.changeName = function(name) {
+    this.name = name;
+    return this;
+  };
+}
+
+var person = new Person("John");
+person.sayName().changeName("Timmy").sayName();
+```
+
