@@ -892,5 +892,116 @@ var negativeNumberOne = -one; // Number -1
 )()
 ```
 
+包裹在圆括号中的匿名函数，将匿名函数编程一个函数表达式或变量表达式，而不是一个在全局（或任意）作用域的简单匿名函数。因此我们现在有一个未命名的函数表达式。
+当然，我们也可以为其命名。
+
+```js
+(someNamedFunction = function(msg) {
+    console.log(msg || "Nothing for today !!")
+    }) (); // Output --> Nothing for today !!
+
+someNamedFunction("Javascript rocks !!"); // Output --> Javascript rocks !!
+someNamedFunction(); // Output --> Nothing for today !!
+```
+
+预知更多详细情节：URL‘s 1. [Link 1](https://blog.mariusschulz.com/2016/01/13/disassembling-javascripts-iife-syntax) 2. [Link 2](http://javascriptissexy.com/12-simple-yet-powerful-javascript-tips/)
+
+#  26 过滤、排序字符串表
+你可能有一个一大长串名单需要过滤重复元素，同时需要按照字母表排列。
+
+在下面例子中给出了一个JavaScript**保留字**列表，但是你会发现其中有许多重复单词，并且未按序排列。因此，我们使用下列数组测试我们的小技巧。
+
+```js
+var keywords = ['do', 'if', 'in', 'for', 'new', 'try', 'var', 'case', 'else', 'enum', 'null', 'this', 'true', 'void', 'with', 'break', 'catch', 'class', 'const', 'false', 'super', 'throw', 'while', 'delete', 'export', 'import', 'return', 'switch', 'typeof', 'default', 'extends', 'finally', 'continue', 'debugger', 'function', 'do', 'if', 'in', 'for', 'int', 'new', 'try', 'var', 'byte', 'case', 'char', 'else', 'enum', 'goto', 'long', 'null', 'this', 'true', 'void', 'with', 'break', 'catch', 'class', 'const', 'false', 'final', 'float', 'short', 'super', 'throw', 'while', 'delete', 'double', 'export', 'import', 'native', 'public', 'return', 'static', 'switch', 'throws', 'typeof', 'boolean', 'default', 'extends', 'finally', 'package', 'private', 'abstract', 'continue', 'debugger', 'function', 'volatile', 'interface', 'protected', 'transient', 'implements', 'instanceof', 'synchronized', 'do', 'if', 'in', 'for', 'let', 'new', 'try', 'var', 'case', 'else', 'enum', 'eval', 'null', 'this', 'true', 'void', 'with', 'break', 'catch', 'class', 'const', 'false', 'super', 'throw', 'while', 'yield', 'delete', 'export', 'import', 'public', 'return', 'static', 'switch', 'typeof', 'default', 'extends', 'finally', 'package', 'private', 'continue', 'debugger', 'function', 'arguments', 'interface', 'protected', 'implements', 'instanceof', 'do', 'if', 'in', 'for', 'let', 'new', 'try', 'var', 'case', 'else', 'enum', 'eval', 'null', 'this', 'true', 'void', 'with', 'await', 'break', 'catch', 'class', 'const', 'false', 'super', 'throw', 'while', 'yield', 'delete', 'export', 'import', 'public', 'return', 'static', 'switch', 'typeof', 'default', 'extends', 'finally', 'package', 'private', 'continue', 'debugger', 'function', 'arguments', 'interface', 'protected', 'implements', 'instanceof'];
+```
+
+因为我们不希望更改原生列表，所以我们准备使用`filter`方法，它将会基于我们的传入的**过滤方法**返回过滤后数组。这个比较方法会比较原生数组当前位置的保留字与新生成数组索引，并且会在符合要求情况下添加进新数组中。
+
+最后，我们会排序过滤后数组使用`sort`方法，我们会为其传入比较方法，要求其返回按字母序排列的数组。
+
+```js
+var filteredAndSortedKeywords = keywords
+  .filter(function (keyword, index) {
+      return keywords.lastIndexOf(keyword) === index;
+    })
+  .sort(function (a, b) {
+      return a < b ? -1 : 1;
+    });
+```
+
+ES6版本，我们使用**箭头函数**来传递比较方法：
+
+```js
+const filteredAndSortedKeywords = keywords
+  .filter((keyword, index) => keywords.lastIndexOf(keyword) === index)
+  .sort((a, b) => a < b ? -1 : 1);
+```
+
+最后，我们可以得到去重且重排序的JavaScript保留字数组。
+
+# 27 短路求值
+[短路求值](https://zh.wikipedia.org/wiki/%E7%9F%AD%E8%B7%AF%E6%B1%82%E5%80%BC)的第二个参数被执行或者返回值，必须要看第一个参数值是否满足表达式要求。
+
+* 在AND(&&)方法中当第一个参数为假时，则整个返回值必为**假**。
+* 在OR(||)方法中，当第一个参数为真时，则返回值必为**真**。
+
+```js
+var test = true;
+var isTrue = function(){
+  console.log('Test is true.');
+};
+var isFalse = function(){
+  console.log('Test is false.');
+};
+
+//Using logical AND - &&.
+// A normal if statement.
+if(test){
+  isTrue();    // Test is true
+}
+
+// Above can be done using '&&' as -
+
+( test && isTrue() );  // Test is true
 
 
+//Using logical OR - ||.
+
+test = false;
+if(!test){
+  isFalse();    // Test is false.
+}
+
+( test || isFalse());  // Test is false.
+```
+
+逻辑或方法，也可以被用来为函数设默认值
+
+```js
+function theSameOldFoo(name){ 
+    name = name || 'Bar' ;
+    console.log("My best friend's name is " + name);
+}
+theSameOldFoo();  // My best friend's name is Bar
+theSameOldFoo('Bhaskar');  // My best friend's name is Bhaskar
+```
+
+逻辑与方法，可以被用来避免属性值未定义的情况：
+
+```js
+var dog = { 
+  bark: function(){
+     console.log('Woof Woof');
+   }
+};
+
+// Calling dog.bark();
+dog.bark(); // Woof Woof.
+
+//But if dog is not defined, dog.bark() will raise an error "Cannot read property 'bark' of undefined."
+// To prevent this, we can you &&.
+
+dog&&dog.bark();   // This will only call dog.bark(), if dog is defined.
+```
+
+# 28 科里化 VS 部分应用程序
