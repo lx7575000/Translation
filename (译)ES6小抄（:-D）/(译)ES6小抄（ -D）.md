@@ -378,3 +378,168 @@ import React, { Component, PropTypes } from 'react';
 
   > 注意： 导出的值是绑定不是引用。因此，改变模块内被绑定的变量将影响导出模块内的值。因此，避免更改导出这些值的公共接口。
 
+# 参数
+在ES5中，对于函数的默认值、未知参数个数和命名参数，我们有不同的做法。在ES6中，我们可以通过更加简洁的语法完成上述内容。
+##默认函数值
+
+```js
+// ES5
+function addTwoNumbers(x, y) {
+    x = x || 0;
+    y = y || 0;
+    return x + y;
+}
+
+// ES6
+// 我们可以直接在函数中设定参数默认值
+function addTwoNumbers(x=0, y=0) {
+    return x + y;
+}
+
+addTwoNumbers(2, 4); // 6
+addTwoNumbers(2); // 2
+addTwoNumbers(); // 0
+```
+
+##其他参数
+在ES5，我们通过如下方式处理参数数目不明确的情况：
+
+```js
+function logArguments() {
+    for (var i=0; i < arguments.length; i++) {
+        console.log(arguments[i]);
+    }
+}
+```
+
+通过使用其他操作符，我们可以直接传递未知数目的参数。
+
+```js
+function logArguments(...args) {
+    for (let arg of args) {
+        console.log(arg);
+    }
+}
+```
+
+##命名参数
+ES5中处理命名参数，通过使用继承自JQuery的选择对象模式。
+
+```js
+function initializeCanvas(options) {
+    var height = options.height || 600;
+    var width  = options.width  || 400;
+    var lineStroke = options.lineStroke || 'black';
+}
+```
+
+我们可以实现相同的功能，通过使用解构作为一个函数的形式参数:
+
+```js
+function initializeCanvas(
+    { height=600, width=400, lineStroke='black'}) {
+        // Use variables height, width, lineStroke here
+    }
+```
+
+如果希望得到让全部值可选，我们可以解构一个空对象。
+
+```js
+function initializeCanvas(
+    { height=600, width=400, lineStroke='black'} = {}) {
+        // ...
+    }
+```
+
+## 展开操作符
+在ES5中，我们可以通过对`Math.max`方法使用`apply`得到数组中的最大值。
+
+```js
+Math.max.apply(null, [-1, 100, 9001, -32]); // 9001
+```
+
+在ES6中，我们可以使用展开操作符通过一个数组作为参数传递到函数中。
+
+```js
+Math.max(...[-1, 100, 9001, -32]); // 9001
+```
+
+可以通过通过展开操作符得到简单方式连接数组。
+
+```js
+let cities = ['San Francisco', 'Los Angeles'];
+let places = ['Miami', ...cities, 'Chicago']; // ['Miami', 'San Francisco', 'Los Angeles', 'Chicago']
+```
+
+# 类
+在ES6之前，我们通过创建构造函数实现类，并且增加属性和扩展原型链。
+
+```js
+function Person(name, age, gender) {
+    this.name   = name;
+    this.age    = age;
+    this.gender = gender;
+}
+
+Person.prototype.incrementAge = function () {
+    return this.age += 1;
+};
+```
+
+然后基于父类创建扩展类。
+
+```js
+function Personal(name, age, gender, occupation, hobby) {
+    Person.call(this, name, age, gender);
+    this.occupation = occupation;
+    this.hobby = hobby;
+}
+
+Personal.prototype = Object.create(Person.prototype);
+Personal.prototype.constructor = Personal;
+Personal.prototype.incrementAge = function () {
+    Person.prototype.incrementAge.call(this);
+    this.age += 20;
+    console.log(this.age);
+};
+```
+
+ES6提供了丰富的语法糖来直接创建类：
+
+```js
+class Person {
+    constructor(name, age, gender) {
+        this.name   = name;
+        this.age    = age;
+        this.gender = gender;
+    }
+
+    incrementAge() {
+      this.age += 1;
+    }
+}
+```
+
+**并且，可以直接通过`extends`关键字扩展类**
+
+```js
+class Personal extends Person {
+    constructor(name, age, gender, occupation, hobby) {
+        super(name, age, gender);
+        this.occupation = occupation;
+        this.hobby = hobby;
+    }
+
+    incrementAge() {
+        super.incrementAge();
+        this.age += 20;
+        console.log(this.age);
+    }
+}
+```
+
+**最佳实践** 
+> ES6的语法掩盖了如何创建和扩展原型链的工作，对于初学者来说这是一个能够让我们编写更清晰代码的特性。
+
+
+

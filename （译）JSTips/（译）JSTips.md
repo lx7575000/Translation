@@ -1379,3 +1379,75 @@ for (let i=0; i<5; i++) {
 ```
 
 # 35 赋值操作符
+赋值操作非常常见，有时对于我们这些懒惰的程序员来说打字变得耗时了。因此我们会使用一些小技巧来使我们的代码简洁。
+
+```js
+x += 23; // x = x + 23;
+y -= 15; // y = y - 15;
+z *= 10; // z = z * 10;
+k /= 7; // k = k / 7;
+p %= 3; // p = p % 3;
+d **= 2; // d = d ** 2;
+m >>= 2; // m = m >> 2;
+n <<= 2; // n = n << 2;
+n ++; // n = n + 1;
+n --; n = n - 1;
+```
+
+## `If-else`使用三元操作符
+常见写法：
+
+```js
+var newValue;
+if(value > 10) 
+  newValue = 5;
+else
+  newValue = 2;
+```
+
+使用三元操作符：
+
+```js
+var newValue = (value > 10) ? 5 : 2;
+```
+
+## Null, Undefined, Empty 检测
+
+```js
+//常见写法
+if (variable1 !== null || variable1 !== undefined || variable1 !== '') {
+     var variable2 = variable1;
+}
+
+//缩写
+var variable2 = variable1  || '';
+```
+
+## 对象数组表示法
+
+```js
+//Common 
+var a = new Array();
+a[0] = "myString1";
+a[1] = "myString2";
+
+//缩写
+var a = ["myString1", "myString2"];
+```
+
+## 关联数组
+
+```js
+// Common 
+var skillSet = new Array();
+skillSet['Document language'] = 'HTML5';
+skillSet['Styling language'] = 'CSS3';
+
+//简写
+var skillSet = {
+    'Document language' : 'HTML5', 
+    'Styling language' : 'CSS3'
+};
+```
+
+## 36 观测DOM的扩展变化
