@@ -1260,4 +1260,122 @@ for (item in objectKeys) {
 var myData = [{z: 1}, {'@': 2}, {b: 3}, {1: 4}, {5: 5}];
 ```
 
-#33 创建
+#33 产生从0到N-1位数的最简函数
+通过下面一行代码，我们可以创建从0到N-1范围的数字组成的数组
+
+```js
+Array.apply(null, {length: N}).map(Number.call, Number);
+```
+
+让我们详细分析该代码，在JavaScript中，我们通过`call()`方法调用函数，传入的第一个参数是用于说明函数作用域，后续参数则为传入该函数作用域的参数值。
+
+```js
+function add(a, b){
+    return (a+b);
+}
+add.call(null, 5, 6);
+```
+
+上例函数会返回5，6的和。
+JavaScript的数组的`map()`方法，要求传入两个参数。第一个参数为回调函数，第二个参数则为作用域。**回调函数**要求传入三个参数,`值`、`索引值`和我们想要操作的`数组`。所以，下面为示例语法：
+
+```js
+[1, 2, 3].map(function(value, index, arr){
+    //Code
+}, this);
+```
+
+下面代码我们创建大小为N的数组：
+
+```js
+Array.apply(null, {length: N})
+```
+
+下面的方法将所有元素传入创建的新数组：
+
+```js
+Array.apply(null, {length: N}).map(Number.call, Number);
+```
+
+如果，你希望为从1开始到N的所组成的数组：
+
+```js
+Array.apply(null, {length: N}).map(function(value, index){
+  return index+1;  
+});
+```
+
+
+
+# 34 实现异步循环
+
+让我们尝试实现一个每秒输出一个递增值的异步函数：
+
+```js
+for (var i=0; i<5; i++) {
+    setTimeout(function(){
+        console.log(i); 
+    }, 1000);
+}  
+```
+
+但是，结果很蛋疼，没按照要求工作
+
+```js
+> 5
+> 5
+> 5
+> 5
+> 5
+```
+
+**原因：**
+每秒调用的不是i的拷贝，是i值的引用。因此 **`i`** 循环递增,函数执行获取到i值为5。
+这个问题看起来解决很容易，通过将i每次期望执行到的值存储到一个临时变量中。
+
+```js
+for (var i=0; i<5; i++) {
+    var temp = i;
+    setTimeout(function(){
+        console.log(temp); 
+    }, 1000);
+}  
+```
+
+**但是，结果依然不对**
+
+```js
+> 4
+> 4
+> 4
+> 4
+> 4
+```
+
+**解决办法**
+换个方法复制i值。最常见方法是通过声明函数创建闭包并将i值作为参数传递，下面给出自调用方法
+
+```js
+for (var i=0; i<5; i++) {
+    (function(num){
+        setTimeout(function(){
+            console.log(num); 
+        }, 1000); 
+    })(i);  
+}  
+```
+
+在JavaScript中，函数参数仅仅是传值。因此，原生类型都是传递值拷贝。在函数内对参数进行更改不会影响到外部作用域。**对象类型特殊些，对其内容更改会在所有作用域产生影响。**
+
+另一个解决办法是通过使用`let`，使用ES6的`let`关键字，因为它不同于`var`，它会限定作用域。
+
+```js
+for (let i=0; i<5; i++) {
+    var temp = i;
+    setTimeout(function(){
+        console.log(temp); 
+    }, 1000);
+}  
+```
+
+# 35 赋值操作符
