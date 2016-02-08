@@ -1005,3 +1005,259 @@ dog&&dog.bark();   // This will only call dog.bark(), if dog is defined.
 ```
 
 # 28 科里化 VS 部分应用程序
+##科里化
+科里化会将一个函数传入另一个函数中。
+
+```js
+f  :  X * Y -> R
+f' :  X -> ( Y -> R)
+```
+
+与第一个函数`f`传入两个参数不同，我们给`f'`传递一个参数。其返回结果是一个函数方法，我们会将第二个参数传递给它，然后求得结果。
+所以，我们调用未科里化的`f`方法，以下例形式：
+
+```js
+f(2, 3);
+```
+
+应用科里化的`f'`函数以下述形式：
+
+```js
+f’(2)(3);
+```
+
+下面给出具体例子：
+
+```js
+//未科里化
+function add(x, y) {
+  return x + y;
+}
+
+add(3, 5);   // returns 8
+
+//科里化
+function addC(x) {
+  return function (y) {
+    return x + y;
+  }
+}
+
+addC(3)(5);   // returns 8
+```
+
+###科里化算法
+科里化是一个二元函数，其返回一个函数，然后该函数再返回一个函数。
+`curry : (X * Y -> R) -> (X -> (Y -> R)) `
+
+```js
+function curry(f) {
+  return function(x) {
+    return function(y) {
+      return f(x, y);
+    }
+  }
+}
+```
+
+##局部应用
+局部应用传入一个函数
+`f: X * Y -> R`
+并且设定固定值与第一个参数计算，产生新函数。
+`f' Y -> R`
+**f'**方法与**f**方法作用相同，只是将第二个参数放入返回的第二个方法中传入。
+例如，下面例子将第一个参数传入新方法，并设定固定值5与其相加：
+
+```js
+function plus5(y) {
+  return 5 + y;
+}
+
+plus5(3);  // returns 8
+```
+
+###部分应用算法
+partApply方法传入一个二元函数方法和一个参数，返回一个一元函数。
+`((X * Y -> R)) -> (X * (Y -> R))`
+
+```js
+function partApply(f, x) {
+  return function(y) {
+    return f(x, y);
+  }
+}
+```
+
+#29 通过记忆数据加快递归函数 
+大家对斐波那契数列都很熟悉了，我们看以在20秒就写出下列函数
+
+```js
+var fibonacci = function(n){
+    return n < 2 ? n : fibonacci(n-1) + fibonacci(n-2);
+}
+```
+
+它很有用，但是因为做了过多重复计算工作所以没效率。我们可以通过存下其之前的计算结果来增速计算：
+
+```js
+var fibonacci = (function(){
+    var cache = {
+        0: 0,
+        1: 1
+    };
+    return function self(n){
+        return n in cache ? cache[n] : (cache[n] = self(n-1) + self(n-2));
+    }
+})()
+```
+
+我们也可以定义一个更高级接收函数作为参数的方法，并且返回之前存储下的该方法。
+
+```js
+//ES5
+
+var memoize = function(func){
+    var cache = {};
+    return function(){
+        var key = Array.prototype.slice.call(arguments).toString();
+        return key in cache ? cache[key] : (cache[key] = func.apply(this,arguments));
+    }
+}
+fibonacci = memoize(fibonacci);
+
+//ES6
+
+var memoize = function(func){
+    const cache = {};
+    return (...args) => {
+        const key = [...args].toString();
+        return key in cache ? cache[key] : (cache[key] = func(...args));
+    }
+}
+fibonacci = memoize(fibonacci);
+```
+
+我们可以在多种情况下使用`memoize()`方法。
+* GCD（最大公约数）
+* 阶乘计算
+
+```js
+//Greatest Common Divisor
+var gcd = memoize(function(a,b){
+    var t;
+    if (a < b) t=b, b=a, a=t;
+    while(b != 0) t=b, b = a%b, a=t;
+    return a;
+})
+gcd(27,183); //=> 3
+
+//Factorial calculation
+var factorial = memoize(function(n) {
+    return (n <= 1) ? 1 : n * factorial(n-1);
+})
+factorial(5); //=> 120
+```
+
+# 30 转换真假值为布尔型
+你可以转换真、假值为**真**布尔型，通过`!!`操作符。
+
+```js
+!!"" // false
+!!0 // false
+!!null // false
+!!undefined // false
+!!NaN // false
+
+!!"hello" // true
+!!1 // true
+!!{} // true
+!![] // true
+```
+
+# 31 避免更改或传递参数到`arguments`-非最优化
+##背景
+在JavaScript中，`arguments`变量可以获取传递给函数方法所有的参数。`arguments`是一个类数组对象，可以使用数组的操作符进行操作，同时它也有`length`属性。但是它没有数组内置方法，例如`filter`、`map`和`forEach`。因此，常见方法是将`arguments`转变为数组类型：}
+
+```js
+var args = Array.prototype.slice.call(arguments);
+```
+
+通过调用数组的`slice`方法传递`arguments`的值。但是，`slice`方法只是返回`arguments`的浅拷贝到新建数组。简写方法如下：
+
+```js
+var args = [].slice.call(arguments);
+```
+
+通过简单的数组符号调用`slice`方法即可。
+## 优化
+在函数内使用`arguments`都会导致Chrome的**V8**引擎和**Node**跳过函数优化部分，因此导致执行效率较差。可以阅读[优化杀手](https://github.com/petkaantonov/bluebird/wiki/Optimization-killers)。传递`arguments`给任意函数都会导致`arguments`泄露。
+当然，如果想要`arguments`的数组，允许你是用这个方法：
+
+```js
+var args = new Array(arguments.length);
+for(var i = 0; i < args.length; ++i) {
+  args[i] = arguments[i];
+}
+```
+
+恩，这样虽然很啰嗦，但是生产环境代码效率高于一切。
+
+# 32 使用Map解决对象属性无序问题
+## 对象属性顺序
+> 一个对象是类型对象的一个成员。它是无序属性集合，每个属性都包含一个初始值、对象或方法。存储在对象内的函数被称为方法。
+
+看下面例子，每个浏览器都有其自己的排序规则，因此对象的顺序没法固定。
+
+```js
+var myObject = {
+    z: 1,
+    '@': 2,
+    b: 3,
+    1: 4,
+    5: 5
+};
+console.log(myObject) // Object {1: 4, 5: 5, z: 1, @: 2, b: 3}
+
+for (item in myObject) {...
+// 1
+// 5
+// z
+// @
+// b
+```
+
+## 如何解决？
+
+### Map
+
+我们可以通过使用ES6的新特性—`Map`。Map对象根据其添加顺序进行排序。使用`for ... of`循环方法返回包含每个元素的**键值对**数组
+
+```js
+var myObject = new Map();
+myObject.set('z', 1);
+myObject.set('@', 2);
+myObject.set('b', 3);
+for (var [key, value] of myObject) {
+  console.log(key, value);
+...
+// z 1
+// @ 2
+// b 3
+```
+
+###老版本浏览器解决办法
+**Mozilla 建议**
+> 如果想要跨平台并且有序的将执行对象内的值或方法，可以通过使用两数组，分别按顺序存储关键字及相对应的值的方式来达成。
+
+```js
+// Using two separate arrays
+var objectKeys = [z, @, b, 1, 5];
+for (item in objectKeys) {
+    myObject[item]
+...
+
+// Build an array of single-property objects
+var myData = [{z: 1}, {'@': 2}, {b: 3}, {1: 4}, {5: 5}];
+```
+
+#33 创建
