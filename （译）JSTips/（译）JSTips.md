@@ -1451,3 +1451,302 @@ var skillSet = {
 ```
 
 ## 36 观测DOM的扩展变化
+**翻译的很差，后面会重新对其进行翻译**
+[MutationObserver](https://developer.mozilla.org/en/docs/Web/API/MutationObserver)可以监听DOM变化，并且可以在他们状态变化时对其进行操作。在下例中有当第一个目标元素创建完成，准备进行创建后面一个元素时。定时器动态加载内容。扩展代码中，首先，根观察者工作直到目标元素产生，然后元素观察者开始工作。这样级联的观察帮助最后发现子目标元素的发现。这样的方式，对于扩展开发复杂网站动态加载内容很有用。
+
+```js
+const observeConfig = {
+    attributes: true,
+    childList: true,
+    characterData: true,
+    subtree: true
+};
+
+function initExtension(rootElement, targetSelector, subTargetSelector) {
+    var rootObserver = new MutationObserver(function(mutations) {
+        console.log("Inside root observer");
+        targetElement = rootElement.querySelector(targetSelector);
+        if (targetElement) {
+            rootObserver.disconnect();
+            var elementObserver = new MutationObserver(function(mutations) {
+                console.log("Inside element observer")
+                subTargetElement = targetElement.querySelector(subTargetSelector);
+                if (subTargetElement) {
+                    elementObserver.disconnect();
+                    console.log("subTargetElement found!")
+                }
+            })
+            elementObserver.observe(targetElement, observeConfig);
+        }
+    })
+    rootObserver.observe(rootElement, observeConfig);
+}
+
+(function() {
+
+    initExtension(document.body, "div.target", "div.subtarget")
+
+    setTimeout(function() {
+        del = document.createElement("div");
+        del.innerHTML = "<div class='target'>target</div>"
+        document.body.appendChild(del)
+    }, 3000);
+
+
+    setTimeout(function() {
+        var el = document.body.querySelector('div.target')
+        if (el) {
+            del = document.createElement("div");
+            del.innerHTML = "<div class='subtarget'>subtarget</div>"
+            el.appendChild(del)
+        }
+    }, 5000);
+
+})()
+```
+
+# 37数组的删除处理
+##原生类型
+如果数组内仅仅包括原生数据类型，我们可以通过`filter`和`indexOf`方法对其进行删除处理。
+
+```js
+var deduped = [ 1, 1, 'a', 'a' ].filter(function (el, i, arr) {
+    return arr.indexOf(el) === i;
+});
+
+console.log(deduped); // [ 1, 'a' ]
+```
+
+## ES2015
+可以通过使用箭头函数将该函数写的更加紧凑小巧。
+
+```js
+var deduped = [ 1, 1, 'a', 'a' ].filter( (el, i, arr) => arr.indexOf(el) === i);
+
+console.log(deduped); // [ 1, 'a' ]
+```
+
+但是，假如引进使用`Sets`和`from`方法，我们实现该方法更加方便
+
+```js
+var deduped = Array.from( new Set([ 1, 1, 'a', 'a' ]) );
+
+console.log(deduped); // [ 1, 'a' ]
+```
+
+## 对象
+当元素是对象时，我们没法使用上述方法，这是因为对象存储是基于引用而其他元素则是基于值拷贝存储。
+
+```js
+1 === 1 // true
+
+'a' === 'a' // true
+
+{ a: 1 } === { a: 1 } // false
+```
+
+因此，我们通过使用哈希表来完成同样目的
+
+```js
+function dedup(arr) {
+    var hashTable = {};
+
+    return arr.filter(function (el) {
+        var key = JSON.stringify(el);
+        var match = Boolean(hashTable[key]);
+
+        return (match ? false : hashTable[key] = true);
+    });
+}
+
+var deduped = dedup([
+    { a: 1 },
+    { a: 1 },
+    [ 1, 2 ],
+    [ 1, 2 ]
+]);
+
+console.log(deduped); // [ {a: 1}, [1, 2] ]
+```
+
+在JavaScript中，哈希表是简单的对象。`key`关键字一直是`string`类型。这意味着我们无法分辨数值和字符串的相同值，比如1和‘1’.
+
+```js
+var hashTable = {};
+
+hashTable[1] = true;
+hashTable['1'] = true;
+
+console.log(hashTable); // { '1': true }
+```
+
+但是，由于我们使用了`JSON.stringify`。关键字为`string`类型，因此存储形式为转移字符串值，在哈希表中转化为独一无二的键值。
+
+```js
+var hashTable = {};
+
+hashTable[JSON.stringify(1)] = true;
+hashTable[JSON.stringify('1')] = true;
+
+console.log(hashTable); // { '1': true, '\'1\'': true }
+```
+
+这意味着重复的元素相同的值，但是类型不同。仍将被相同的方法删除处理。
+
+```js
+var deduped = dedup([
+    { a: 1 },
+    { a: 1 },
+    [ 1, 2 ],
+    [ 1, 2 ],
+    1,
+    1,
+    '1',
+    '1'
+]);
+
+console.log(deduped); // [ {a: 1}, [1, 2], 1, '1' ]
+```
+
+#38 多维数组 -> 单数组
+有三种常用的办法将多维数组合并为单数组。
+**样例数组：**
+
+```js
+var myArray = [[1, 2],[3, 4, 5], [6, 7, 8, 9]];
+
+//转变为
+
+[1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+
+##方法1 ： 使用`concat()` 和`apply()`
+
+```js
+var myNewArray = [].concat.apply([], myArray);
+// [1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+
+##方法2： 使用`reduce()`方法
+
+```js
+var myNewArray = myArray.reduce(function(prev, curr) {
+  return prev.concat(curr);
+});
+// [1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+
+##方法3： 
+
+```js
+var myNewArray3 = [];
+for (var i = 0; i < myArray.length; ++i) {
+  for (var j = 0; j < myArray[i].length; ++j)
+    myNewArray3.push(myArray[i][j]);
+}
+console.log(myNewArray3);
+// [1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+
+[这里](https://jsbin.com/qeqicu/edit?js,console)有上述三个方法的应用。
+对无限嵌套的数组，可以尝试使用**Underscore**的[flatten](https://github.com/jashkenas/underscore/blob/master/underscore.js#L501)
+[这里](http://jsperf.com/flatten-an-array-loop-vs-reduce/6)有对于三个方法表现的测试。
+
+## 39 JavaScript高级属性
+在JavaScript中，我们可以对对象`Object`中的属性进行设定。比如我们设定其为**私有**或**只读**。这一特性已经被ES5和新版本浏览器所支持。
+因此，你可以通过`Object`的`defineProperty`方法使用。
+
+```js
+var a = {};
+Object.defineProperty(a, 'readonly', {
+  value: 15,
+  writable: false
+});
+
+a.readonly = 20;
+console.log(a.readonly); // 15
+```
+
+具体语法：
+
+```js
+//Single Line
+Object.defineProperty(dest, propName, options)
+
+//Multiple Line
+Object.defineProperties(dest, {
+  propA: optionsA,
+  propB: optionsB, //...
+})
+```
+
+其中`options`包括以下属性
+* `value`值： 如果该属性没有`getter`方法，则`value`是强制设定属性。`{a: 12} === Object.defineProperty(obj, 'a', {value: 12})`
+* `writable`属性： 设定属性为**只读**。注意，如果属性是一个嵌套对象，则其属性仍可写。
+* `enumerable`：设定属性是否隐藏。这一设定用于说明`for ... of`循环和`stringify`方法将不会能遍历到这一属性，但是该属性仍存在且**可读可写**。
+* `configurable`：设定属性不可修改。防止其被删除或重定义。当然，如果该属性为对象，则其内属性仍可以被更改。
+
+因此，假如想要创建私有常量对象，你可以按照下例方式设定：
+
+```js
+Object.defineProperty(obj,
+  'myPrivateProp', 
+  { 
+    value: val, 
+    enumerable: false, 
+    writable: false, 
+    configurable: false
+  });
+```
+
+除了设定属性，`defineProperty`允许我们设定**动态属性**，由于第二个参数是字符串。例如，我们希望根据一些额外设定创建属性。
+
+```js
+var obj = {
+  getTypeFromExternal(): true // illegal in ES5.1
+}
+
+Object.defineProperty(obj, getTypeFromExternal(), {value: true}); // ok
+
+// For the example sake, ES6 introduced a new syntax:
+var obj = {
+  [getTypeFromExternal()]: true
+}
+```
+
+高级属性允许我们像面向对象语言那样创建`getter`和`setter`属性。因此，我们不能使用`writable`、`enumerable`和`configurable`属性，而改用：
+
+```js
+function Foobar () {
+  var _foo; //  true private property
+
+  Object.defineProperty(obj, 'foo', {
+    get: function () { return _foo; }
+    set: function (value) { _foo = value }
+  });
+
+}
+
+var foobar = new Foobar();
+foobar.foo; // 15
+foobar.foo = 20; // _foo = 20
+```
+
+除了先进的访问器和明显封装的优势外，你会发现，我们直接通过**`.`**获得到了属性，没有调用`getter`方法。这么做非常简洁，例如我们有一个多层嵌套的对象。
+
+```js
+var obj = {a: {b: {c: [{d: 10}, {d: 20}] } } };
+```
+
+相比于`a.b.c[0].d`的语法，我们可以通过创建一个别名调用：
+
+```js
+Object.defineProperty(obj, 'firstD', {
+  get: function () { return a && a.b && a.b.c && a.b.c[0] && a.b.c[0].d }
+})
+
+console.log(obj.firstD) // 10
+```
+
+##注意
+如果设定了`getter`方法没有设定`setter`方法却想设定值，系统会返回错误。当使用辅助函数例如`$.extend`或`_.merge`时切记这点，注意使用。
