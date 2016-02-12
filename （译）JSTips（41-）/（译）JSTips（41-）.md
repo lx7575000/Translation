@@ -1,5 +1,3 @@
-# （译）JSTips（41-）
-
 \#41 数值数组的平均数和中位数
 
 ```js
@@ -85,3 +83,20 @@ function unapplyAttack() {
   Object.freeze(Function.prototype);
 }());
 ```
+
+# 43 使用解构提取函数参数
+你可能已经很熟悉ES6的解构特性，但你是否知道可以用它来取得函数传递的参数值？
+
+```js
+var sayHello = function({ name, surname }) {
+  console.log(`Hello ${name} ${surname}! How are you?`);
+};
+
+sayHello({
+  name: 'John',
+  surname: 'Smith'
+});
+```
+
+这方法对于接收可选对象作为参数的函数非常有用。
+> 切记，**解构赋值**并非在NodeJS和所有浏览器都可应用。你可以使用NodeJS的`--harmony-destructuring`标志来尝试在项目中使用。
