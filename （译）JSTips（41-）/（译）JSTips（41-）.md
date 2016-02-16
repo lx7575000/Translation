@@ -199,3 +199,74 @@ document.onreadystatechange = () => {
 ```
 
 使用`document.readyState === 'interactive'`可以查看**DOM**是否就绪。
+
+#47 声明必知必会
+下例中，使用不同的JavaScript方法声明变量。注释和`console.log`足够说明发生了什么。
+
+```js
+//Example 1
+
+var y, x = y = 1 //== var x; var y; x = y = 1
+console.log('--> 1:', `x = ${x}, y = ${y}`)
+
+// Will print
+//--> 1: x = 1, y = 1
+```
+
+首先我们声明两个变量
+
+```js
+//Example 2
+
+;(() => { 
+  var x = y = 2 // == var x; y = 2;
+  console.log('2.0:', `x = ${x}, y = ${y}`)
+})()
+console.log('--> 2.1:', `x = ${x}, y = ${y}`)
+
+// Will print
+//2.0: x = 2, y = 2
+//--> 2.1: x = 1, y = 2
+```
+
+上例2中可以发现，只有**变量y**被更改，其并没有在闭包中被重新声明。
+
+```js
+//Example 3
+
+;(() => { 
+  var x, y = 3 // == var x; var y = 3;
+  console.log('3.0:', `x = ${x}, y = ${y}`)
+})()
+console.log('--> 3.1:', `x = ${x}, y = ${y}`)
+
+// Will print
+//3.0: x = undefined, y = 3
+//--> 3.1: x = 1, y = 2
+```
+
+上例3中，使用`var`关键字声明了两变量。意味着，他们的值只在作用域内有效。
+
+```js
+//Example 4
+
+;(() => { 
+  var y, x = y = 4 // == var x; var y; x = y = 4
+  console.log('4.0:', `x = ${x}, y = ${y}`)
+})()
+console.log('--> 4.1:', `x = ${x}, y = ${y}`)
+
+// Will print
+//4.0: x = 4, y = 4
+//--> 4.1: x = 1, y = 2
+```
+
+例4中，两变量都被重新定义。由于变量优先级为**local > global**，所以**变量x，y**在局部闭包中被赋值不会影响到**全局变量的x，y**。
+
+```js
+x = 5 // == x = 5
+console.log('--> 5:', `x = ${x}, y = ${y}`)
+
+// Will print
+//--> 5: x = 5, y = 2
+```
