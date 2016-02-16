@@ -167,3 +167,35 @@ var numbers = [1, 2, 3, 4];
 Math.max(...numbers) // 4
 Math.min(...numbers) // 1
 ```
+
+#46 使用纯JS监听`documnet`准备情况
+使用纯JS的跨浏览器监测查看`document`是否加载完成，通常可以使用`readyState`
+
+```js
+if (document.readyState === 'complete') {
+    // The page is fully loaded
+}
+```
+
+你可以查看什么时候`document`准备就绪。
+
+```js
+let stateCheck = setInterval(() => {
+    if (document.readyState === 'complete') {
+    clearInterval(stateCheck);
+     // document ready
+  }
+}, 100);
+```
+
+当然，使用`onreadystatechange`也可以进行查看。
+
+```js
+document.onreadystatechange = () => {
+  if (document.readyState === 'complete') {
+   // document ready
+  }
+};
+```
+
+使用`document.readyState === 'interactive'`可以查看**DOM**是否就绪。
