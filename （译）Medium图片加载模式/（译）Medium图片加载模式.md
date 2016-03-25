@@ -1,6 +1,7 @@
 [原文地址](https://jmperezperez.com/medium-image-progressive-loading-placeholder/)
 
-最近，我在[Medium]()浏览帖子的时候发现他们的图片加载效果很赞。首先载入一个模糊的小图片，然后转变为高清大图。这个方法干的真是漂亮，我希望能够知道他是如何办到的。![medium-placeholder.png](resources/C4B1AEAA770FB1F8F8DBBB944CA02342.png)
+最近，我在[Medium]()浏览帖子的时候发现他们的图片加载效果很赞。首先载入一个模糊的小图片，然后转变为高清大图。这个方法干的真是漂亮，我希望能够知道他是如何办到的。
+![medium-placeholder.png](resources/C4B1AEAA770FB1F8F8DBBB944CA02342.png)
 
 ##Medium的技术
 我使用[WebPageTest]()测试这个[页面](https://medium.com/backchannel/exclusive-why-apple-is-still-sweating-the-details-on-imac-531a95e50c91)的载入过程。如果你希望能够测试同样效果，可以打开Medium的页面，通过禁用cache减慢应答过程，会令得到原图资源的时间增长。这样就可以看到整个图片的加载效果。
@@ -43,6 +44,7 @@
 
 ##尝试重新实现同样效果
 我在[CodePen](http://codepen.io/jmperez/pen/yYjPER)重新实现了同样的效果，通过使用`CSS`而不是`canvas`来实现。下面的图片展示了整个加载过程中，图片的转变效果。
+
 ![medium-codepen.png](resources/696FCA181E755D5A905F1F83DAFD5DAD.png)
 
 ##这么做是否值？
@@ -69,7 +71,9 @@
 也可以使用**SVG**的filter来达成同样目的，如[The “Blur Up” Technique for Loading Background Images](https://css-tricks.com/the-blur-up-technique-for-loading-background-images/) 和 [Textured Gradients in Pure CSS](http://rentafounder.com/textured-gradients-in-pure-css/)两篇文章提到的。
 
 ##其他办法提升占位符：Google 图片搜索
-当你在手机上搜索图片时，Googles使用了一种简单的方法来实现图片占位。![google-images-placeholder.png](resources/A83270C0F3F66F140BF8BEE934283EE1.png)
+当你在手机上搜索图片时，Googles使用了一种简单的方法来实现图片占位。
+![google-images-placeholder.png](resources/A83270C0F3F66F140BF8BEE934283EE1.png)
+
 他们选择了一种颜色，并用其作为占位块的背景色。这样做会给用户一种图片加载速度更快的感觉。
 
 ##更先进的方法：Facebook的200 byte技术
