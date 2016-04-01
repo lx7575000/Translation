@@ -1,0 +1,1 @@
+[原文地址](http://thenewcode.com/1052/position-sticky-scroll-to-top-then-fixed-in-pure-CSS)

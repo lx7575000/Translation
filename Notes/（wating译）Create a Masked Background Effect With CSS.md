@@ -1,0 +1,1 @@
+[原文地址](<http://webdesign.tutsplus.com/tutorials/create-a-masked-background-effect-with-css--cms-21112>)
