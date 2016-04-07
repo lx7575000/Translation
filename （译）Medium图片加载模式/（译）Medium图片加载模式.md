@@ -8,6 +8,7 @@
 我使用[WebPageTest]()测试这个[页面](https://medium.com/backchannel/exclusive-why-apple-is-still-sweating-the-details-on-imac-531a95e50c91)的载入过程。如果你希望能够测试同样效果，可以打开Medium的页面，通过禁用cache减慢应答过程，会令得到原图资源的时间增长。这样就可以看到整个图片的加载效果。
 
 **下面是具体执行过程**
+
 1. 使用`div`限定好图片展示的作用域，Medium使用`<div>`标签并加入`padding-bottom`样式设定大小对展示应图片的尺寸作为占位符。这样可以防止在图片载入后出现整体页面**回流**的情况。这一方法也被称为[intrinsic placeholders](http://daverupert.com/2015/12/intrinsic-placeholders-with-picture/)
 
 2. **加载一个小尺寸的图片**，此时网页会先请求一个像素质量较渣的小号缩略图（大概20%）.这个小图片使用`<img />`标签,因此浏览器会立即请求资源链接。
