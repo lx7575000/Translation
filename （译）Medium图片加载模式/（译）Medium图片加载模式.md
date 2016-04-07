@@ -1,14 +1,19 @@
 [原文地址](https://jmperezperez.com/medium-image-progressive-loading-placeholder/)
 
 最近，我在[Medium]()浏览帖子的时候发现他们的图片加载效果很赞。首先载入一个模糊的小图片，然后转变为高清大图。这个方法干的真是漂亮，我希望能够知道他是如何办到的。
+
 ![medium-placeholder.png](resources/C4B1AEAA770FB1F8F8DBBB944CA02342.png)
 
 ##Medium的技术
 我使用[WebPageTest]()测试这个[页面](https://medium.com/backchannel/exclusive-why-apple-is-still-sweating-the-details-on-imac-531a95e50c91)的载入过程。如果你希望能够测试同样效果，可以打开Medium的页面，通过禁用cache减慢应答过程，会令得到原图资源的时间增长。这样就可以看到整个图片的加载效果。
+
 **下面是具体执行过程**
 1. 使用`div`限定好图片展示的作用域，Medium使用`<div>`标签并加入`padding-bottom`样式设定大小对展示应图片的尺寸作为占位符。这样可以防止在图片载入后出现整体页面**回流**的情况。这一方法也被称为[intrinsic placeholders](http://daverupert.com/2015/12/intrinsic-placeholders-with-picture/)
+
 2. **加载一个小尺寸的图片**，此时网页会先请求一个像素质量较渣的小号缩略图（大概20%）.这个小图片使用`<img />`标签,因此浏览器会立即请求资源链接。
+
 3. 只要图片开始加载，它就会被画到`<canvas />`中。然后这个图片数据会通过在`main-base.bundle`的JS文件中自定义的一个`Blur()`函数重新计算，可以看到它的效果会很模糊。尽管有些不同，不过该函数与[StackBlur]()的模糊函数是相似的。**在同一时刻，高清原图也会被请求。**
+
 4. 最后原图被加载到页面上，`canvas`会被隐藏，只展示原图。
 
 感谢CSS的动画功能，所有的转变过程都会很流畅。
