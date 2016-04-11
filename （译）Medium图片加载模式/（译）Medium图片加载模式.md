@@ -1,5 +1,6 @@
 [原文地址](https://jmperezperez.com/medium-image-progressive-loading-placeholder/)
 **翻译地址**：https://github.com/lx7575000/Translation
+
 译者注：感谢xiaoxin38250(微信)帅哥的卖力校对，否则这篇文章读起来会更烂。
 
 我在[Medium]()浏览帖子的时候发现他们的图片加载效果真的很赞诶。首先载入一个低像素的模糊图片，然后逐渐转变为高清大图。这个过程体验真的很好，所以我希望能够明白他们是使用什么方法做到的。
@@ -99,4 +100,6 @@
 
 **其他图片加载技巧：**[ Image optimization: Lossy, lossless and other techniques.
 ](https://jmperezperez.com/image-optimization-lossy-lossless-techniques)
+
+（译者）写在最后：作为英语四级勉强过线选手，如果翻译有不到位地方，请多包涵。如若不能包涵就请跟着链接跳转看原文。当然，如果你感觉文章内容不错，就我给个star吧。
 
