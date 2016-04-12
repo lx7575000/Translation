@@ -1,5 +1,3 @@
-# （译）JSTips（1-40）
-
 #1 数组元素插入 
 [源地址](https://github.com/loverajoel/jstips/blob/gh-pages/_posts/en/2015-12-29-insert-item-inside-an-array.md)
 向已存在的数组中插入元素已经成为日常了，你可以使用`push`方法想数组尾插入新元素，也可以`unshift`新元素到组头，或者应用`splice`方法把元素加入到数组中间。
@@ -1799,3 +1797,5 @@ var str = JSON.stringify(obj, selectedProperties, '\t\t');
 }
 */
 ```
+
+（译者）写在最后：作为英语四级勉强过线选手，如果翻译有不到位地方，请多包涵。如若不能包涵就请跟着链接跳转看原文。当然，如果你感觉文章内容不错，就我给个star吧。

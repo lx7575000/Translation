@@ -1,5 +1,3 @@
-# （译）应用Index 作为 key属性值是反模式
-
 [原文地址](https://medium.com/@robinpokorny/index-as-a-key-is-an-anti-pattern-e0349aece318#.jadd313vz)
 
 经常可以看到开发者们在编写`React`代码render一个列表时使用对象元素的*index* 来作为其**key**属性值。
@@ -58,3 +56,5 @@ function createNewTodo(text) {
   }
 }
 ```
+
+（译者）写在最后：作为英语四级勉强过线选手，如果翻译有不到位地方，请多包涵。如若不能包涵就请跟着链接跳转看原文。当然，如果你感觉文章内容不错，就我给个star吧。

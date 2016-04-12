@@ -1,5 +1,3 @@
-# （译）函数--JavaScript第一公民
-
 [原文地址](http://ryanchristiani.com/functions-as-first-class-citizens-in-javascript/)
 使用JavaScript的我们是幸运的，因为我们可以将函数方法进行多种形式的传递。
 
@@ -158,6 +156,8 @@ add5(8); // 13
 ```
 
 JavaScript是一种学起来有趣且非常强大的语言，并且在其中函数作为一级公民。希望上面所述能够帮助你理解JS的函数方法。
+
+（译者）写在最后：作为英语四级勉强过线选手，如果翻译有不到位地方，请多包涵。如若不能包涵就请跟着链接跳转看原文。当然，如果你感觉文章内容不错，就我给个star吧。
 
 
 
