@@ -13,6 +13,7 @@
   9. Prototypes in JavaScript
   10. React中，应用index作为key值是反模式 // 需要重新校对
   11. What are CSS Modules and why do we need them? //未校对
+  12. 下个月有计划对FrontendMaster出品的JS面试必知必会里面的内容做个人总结(版权啊，版权！)
 
 
   如果你有觉得好的前端文章可以发给我，我会尝试进行翻译 :)
