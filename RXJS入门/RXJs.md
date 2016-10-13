@@ -89,3 +89,82 @@ foo.subscribe(() => console.log('click '));
 `timer`和`interval`方法都可以传入时间间隔参数，在固定时间内触发事件。
 
 `timer(startTime, intervalTime)`中可以设定事件触发的具体时间**startTime**后才开始执行。
+
+##in deepth
+###mapTo
+`mapTo`方法和`map`相似，在每次执行时候返回一个值。不过与它不同的点在于，`mapTo`每次返回的是传递给它的常量值。
+```Js
+let foo = Rx.Observable.interval(1000); //每1秒执行一次
+let mapTo = foo.mapTo('Hello');
+mapTo.subscribe( x => console.log(x)); 
+//每一秒输出一个'Hello'
+```
+###do
+`do`方法通常用于Debug。
+它会拦截源Observable对象传递的值，然后执行传递给`do`方法的函数，传递的方法建议不要有返回值，因为会被忽略掉。`Observable`对象返回的仍然是之前传入的值。
+```Js
+let foo = Rx.Observable.interval(1000).take(4)
+                       .do( x => console.log(x));
+foo.subscribe({
+  next: (x) => console.log('next' + x),
+  error: (err) => console.log('error'),
+  complete: (x) => console.log('done')
+});
+  // => 0  
+  // => next 0
+  // => 1
+  // => next 1
+  // => 2
+  // => next 2
+  // => 3
+  // => next 3
+  // => done
+```
+###take
+`take`方法传入整数参数，会返回该数量的数据。
+```Js
+let interval = Rx.Observable.interval(1000).take(5);
+interval.subscribe(x => console.log(x)); // 0 - 1 - 2 - 3 - 4
+```
+###takeLast || last
+与`take`类似，不过返回的是倒数的几个数据。**并且，这些数据是在最后结束的时候同时返回。**`last`是其缩写。
+```Js
+let many = Rx.Observable.range(1, 100);
+let lastThree = many.takeLast(3);
+lastThree.subscribe( x => console.log(x)); // 98|99|100
+```
+###concat || startWith
+与数组的`concat`方法类似，不过此处在后面添加的是`Observable`对象的事件流。
+`startWith`方法与`concat`相似，不过就是将事件（数据）流添加在了前面。
+
+```Js
+let two = Rx.Observable.interval(2000).take(4);
+// --0--1--2--3
+let four = Rx.Observable.interval(4000).take(4);
+// ----0----1----2----3
+let TwoFour = two.concat(four);
+TwoFour.subscribe(x => console.log(x)); 
+//--0--1--2--3----0----1----2----3
+let FourTwo = four.concat(two);
+//----0----1----2----3--0--1--2--3
+let sTwoFour = four.startWith(two);
+//--0--1--2--3----0----1----2----3
+let sFourTwo = two.startWith(four);
+//----0----1----2----3--0--1--2--3
+```
+###merge
+`merge`方法会将多个`Observable`对象的事件（数据）流合并到同一条流中。
+```JS
+let two = Rx.Observable.interval(2000).take(4);
+// --0--1--2--3
+let four = Rx.Observable.interval(4000).take(4);
+// ----0----1----2----3
+let merge = two.merge(four);
+// --0-01--21--3-2----3
+```
+###skip
+`skip(n)`方法传入整数，跳过`Observable`对象的前n个事件（数据）。
+```Js
+let foo = Rx.Observable.interval(1000).take(10).skip(5);
+foo.subscribe(x => console.log(x)); // ----------5-6-7-8-9
+```
