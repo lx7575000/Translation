@@ -1,11 +1,11 @@
-#React-Router V4 简单实现
+# React-Router V4 简单实现
 >听说V4终于发布了，本文是在阅读RRV4时做的一点小总结
 
 在此对React-Router4.0版本中重要的几个组件做简单的实现。
-##Match组件
+## Match组件
 `Match`组件的作用很简单，就是基于`url`地址来判断是否渲染对应组件。
 
-###使用方式：
+### 使用方式：
 ```JavaScript
 <Match pattern='/test'component={Component} />
 ```
@@ -27,15 +27,15 @@ const Match = ({ pattern, component: Component }) => {
 ```
 `Match`可以提取出URL中所有动态参数，然后将他们以传入到对应的组件。
 
-##Link组件
+## Link组件
 `Link`组件其实就是对`<a>`标签的**封装**。它会禁止掉浏览器的默认操作，通过`history`的API更新浏览器地址。
-###使用方法
+### 使用方法
 
 ```JavaScript
 <Link to="/test" > To Test</Link>
 ```
 
-###基本实现原理
+### 基本实现原理
 ```JavaScript
 import createHistory from 'history/createBroserHistory';
 const history = createHistory();
@@ -67,7 +67,7 @@ class App extends React.Component {
   }
 }
 ```
-###`Link`晋级版本
+### `Link`晋级版本
 我们希望能够根据给该组件传入更多参数。例如:
 1. 当前URL为激活状态时，希望能够显示特别的样式
 2. 如同普通`a`标签一样，居有`target`属性能够在另一个新页面来显示.
@@ -138,10 +138,10 @@ Link.defaultProps = {
 }
 ```
 
-##Redirect
+## Redirect
 `Redirect`组件和`Link`组件类似。和它不同之处在于`Redirect`不需要点击操作，直接就会更新URL地址。
 
-###使用方式
+### 使用方式
 ```JavaScript
 <Redirect to="/test" />
 ```
@@ -164,25 +164,32 @@ class Redirect extends React.Component {
 }
 ```
 以上只是简单的实现，V4版本的`Redirect`组件会判断代码是不是在服务端渲染，并根据结果不同来选择在组件生命周期的哪个阶段进行URL更新操作(isServerRender ? componentWillMount : componentDidMount)。
-###晋级功能
+### 晋级功能
 ```JavaScript
 class Redirect extends React.Component {
   ...
+  // 通过以下方式来判别是否为服务端渲染。
+  isStatic() {
+    return this.context.router && this.context.router.staticContext;
+  }
   // 服务端渲染的话，连Redirect组件都不需要渲染出来就可以跳转。
   componentWillMount() {
-    this.isServerRender = typeof window !== 'object';
-    if (this.isServerRender) {
+    <!--this.isServerRender = typeof window !== 'object';-->
+    <!--if (this.isServerRender) {-->
+    if (this.isStatic())
       this.perform();
     }
   }
   // 浏览器端渲染则需要Redirect组件渲染之后才能进行跳转。
   componentDidMount() {
-    if (!this.isServerRender) {
+    <!--if (!this.isServerRender) {-->
+    if (!this.isStatic())
       this.perform();
     }
   }
+  
   perform() {
-    const { history } = this.context;
+    const { history } = this.context.router;
     const { push, to } = this.props;
     // push是个bool值，用于选择使用history的哪个方法来跳转链接
     if (push) {
@@ -197,7 +204,7 @@ Redirect.defaultProps = {
 }
 ```
 
-##Router
+## Router
 `react-router`中的`Router`组件本质就是个高阶组件，用于包裹所有的页面组件(其实在react-router v4中，`BrowserRouter`才是最外层组件)，并为所有`react-router`提供全局参数`history`。因此`Router`很简单，也很容易实现。
 ```JavaScript
 class Router extends React.Component {
@@ -223,8 +230,8 @@ class Router extends React.Component {
 }
 ```
 
-#React-Router V4
-###SeverRouter (服务端渲染时使用)
+# React-Router V4
+### SeverRouter (服务端渲染时使用)
 `createLocation`方法很简单，就是拆解URL地址，并将其分解为`pathname`,`search`,`hash`三个部分。并以数组的形式返回。
 ```JavaScript
 // 例子url : www.webei.com/#/admin/dashboard/setting?username=liuxin&token=noface;
@@ -261,10 +268,10 @@ const createLocation = (url) => {
   }
 ```
 
-###NavLink 
+### NavLink 
 `NavLink`组件是对`Route`组件的封装。目的是根据根据URL来**Active**对应的`NavLink`组件，为其添加**activeClassName**和**activeStyle**。
 
-###Route
+### Route
 在React-router V4版本中，Route组件存在于**./Core.js**文件中。它是对`createRouteElement`方法的封装。
 
 ```JavaScript
@@ -333,22 +340,22 @@ Route.propTypes = {
 }
 ```
 
-##Router
+## Router
 根据history参数的设定选择使用不同封装的`Router`组件
 
-###MemoryRouter
+### MemoryRouter
 > 源代码注释
 The public API for a <Router> that stores location in memory.
 
-###BrowserRouter
+### BrowserRouter
 > 源代码注释
 The public API for a <Router> that uses HTML5 history.
 
-###HashRouter
+### HashRouter
 > 源代码注释
 The public API for a <Router> that uses window.location.hash.
 
-##withHistory
+## withHistory
 相当重要的组件，没有它就没有根据URL变化而产生的重新渲染了。
 ```JavaScript
 /**
@@ -385,6 +392,140 @@ const withHistory = (component) => {
 }
 
 ```
+
+## V4版发布后，再重看代码
+### Link组件 
+
+### Switch
+`<Switch>`组件的作用是根据url值筛选子组件中`path`与之相匹配的组件，然后渲染出来。
+最接地气的解释就是：for循环遍历查找。
+```JavaScript
+// 当前浏览器中的url地址
+const browser_url = '/test/show';
+
+const route_urls = ['/test/not_show', '/test/not_show', '/test/show', '/test/not_show'];
+
+let match = null, index = null;
+
+route_urls.forEach((url, index) => {
+  if (url === browser_url) {
+    match = true;
+    index = index;
+  }
+});
+
+if (match) {
+  console.log(`第${index}个元素与当前url ${browser_url}相匹配，返回该组件`);
+} else {
+  console.log('没有匹配项，要么默认返回一个无path的Route组件，要么就什么也不渲染。')
+}
+```
+OK！我们就按照上面的思想来简单实现下`<Switch>`组件吧。
+
+```JavaScript
+class Switch extends React.Component {
+  render() {
+    let match, child;
+    React.Children.forEach(children, element => {
+      if (!React.isVaildElement(element)) 
+        return;
+      
+      const { path: pathProp, exact, strict, from } = element.props;
+      // 如果from该值非空，则表示Switch中存在Redirect组件，用来跳转到其他url。
+      const path = pathProp || from; 
+      
+      
+      if (match === null) {
+        child = element;
+        match = path ? location.pathname : route.match;
+      }
+    });
+    
+    // 正如上文所说，Switch的作用就是查找是否存在对应url的组件，并返回。
+    return match ? React.cloneElement(child, {location }) : null;
+  }
+}
+```
+
+### Prompt
+Prompt组件的作用很简单：如果未到达某些特定要求，不允许直接URL跳转。
+Prompt组件会在`willMount`的时候就注册监听事件，监听url状态变化。当有变化时，会根据预设定状态选择是否阻拦跳转。
+那如果拦截条件变化时，会在`willReceiveProps`时根据传入参数值变化。
+- 可能是修改跳转拦截提醒。
+- 也可能是取消拦截跳转。
+
+讲了Prompt的作用后，就让我来实现下Prompt组件的功能吧。
+```JavaScript
+var isBlocked = false;
+var block = function block() {
+    var prompt = arguments.length > 0 && arguments[0] !== undefined ? 
+    arguments[0] : false;
+    
+    // 设置alert的提示文字
+    var unblock = transitionManager.setPrompt(prompt);
+
+    if (!isBlocked) {
+      // 添加拦截监听
+      checkDOMListeners(1);
+      isBlocked = true;
+    }
+
+    return function () {
+      if (isBlocked) {
+        isBlocked = false;
+        // 移除拦截监听
+        checkDOMListeners(-1);
+      }
+
+      return unblock();
+    };
+  };
+
+
+class Prompt extends React.Component {
+  // 开始拦截
+  enable(message) {
+    if (this.unblock) {
+      this.unblock();
+    }
+    this.unblock = this.context.router.history.block(message);
+  }
+  // 结束拦截
+  disable() {
+    if (this.unblock) {
+      this.unblock();
+      this.unblock = null;
+    }
+  }
+  
+  componentWillMount() {
+    if (this.props.when) {
+      this.enable(this.props.message);
+    }
+  }
+  
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.when) {
+      if (!this.props.when || this.props.message !== nextProps.message ) {
+        // 修改提示消息
+        this.enable(nextProps.message);
+      } else {
+        this.disable();
+      }
+    }
+  }
+  
+  componentWillUnmount() {
+    this.disable();
+  }
+  render() {
+    // 反正就是做监听，和Match组件一样，啥都不需要返回。
+    return null;
+  }
+}
+```
+
+
 
 
 
