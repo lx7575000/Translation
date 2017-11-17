@@ -86,7 +86,6 @@ d3.select('svg')
 ```
 
 **效果图**
-
 ![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/77ABF4C7DE077DA3AABB50477118CB96.jpg)
 
 ### 连续值（输入输出）的比例尺
@@ -161,7 +160,6 @@ d3.select('svg')
 ```
 
 **效果图**
-
 ![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/76B8DDF6B72ECDBE35D5E90BB815044E.jpg)
 
 #### 对数比例尺（scaleLog）
@@ -245,7 +243,7 @@ d3.select('svg')
 
 **效果图**
 
-![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/8BA5AA3083122EF3600EEE863BA2436F.jpg =814x60)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/8BA5AA3083122EF3600EEE863BA2436F.jpg=814x60)
 
 #### 顺序比例尺(scaleSwquential)
 
@@ -285,7 +283,7 @@ d3.select('svg')
 
 **效果图**
 
-![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/A3FD7BC43B87EE5CA1273F14486736FA.jpg =660x74)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/A3FD7BC43B87EE5CA1273F14486736FA.jpg=660x74)
 
 切记，插值器会决定输出范围，因此你不需要指定值域范围。下面我们会展示几个颜色插值器：
 
@@ -339,7 +337,7 @@ d3.select('svg')
 
 ```
 
-![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/B94D1E47287872078676C8004E533C6A.jpg =659x582)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/B94D1E47287872078676C8004E533C6A.jpg=659x582)
 
 
 ### 区间
@@ -386,8 +384,7 @@ d3.select('svg')
   .call(axis)
 ```
 **效果图**
-
-![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/90C7A7FEB981E17F299A9DEE3F1D21AC.jpg =627x63)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/90C7A7FEB981E17F299A9DEE3F1D21AC.jpg=627x63)
 
 想你之所想，急你之所急。D3提供了`.nice()`方法会帮你把定义域数值范围弄的更平滑好看些。_切记， 每次更新domain时候，都要重新调用`nice`方法_
 
@@ -395,8 +392,7 @@ d3.select('svg')
 linearScale.nice()
 ```
 **效果图**
-
-![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/00AC53CCB0E60DAE78601D008A330DD2.jpg =680x85)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/00AC53CCB0E60DAE78601D008A330DD2.jpg=680x85)
 
 #### 多区间（Multiple segments）
 `scaleLinear`,`scalePow`,`scaleSqrt`, `scaleLog`和`scaleTime`的作用域（domain）通常是由两个值（起始、终值）组成的。但现实应用场景中，我们会有用到需要传入多个值将作用域分为多个区间范围的需求。
@@ -435,8 +431,7 @@ d3.select('svg')
 ```
 **效果图**
 
-
-![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/958F68E12E5B5EEDE95DB98FEBAB4257.jpg =661x59)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/958F68E12E5B5EEDE95DB98FEBAB4257.jpg=661x59)
 
 通常我们会使用多个段来区分正负值的情况（上面的例子），我们也可以使用更多的分块，只要作用域和值域具有相同的**区间个数**。
 
@@ -500,8 +495,7 @@ d3.select('svg')
 
 **效果图**
 
-
-![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/D2D06F62089CA3DD9EBB213C9A6E9141.jpg =629x49)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/D2D06F62089CA3DD9EBB213C9A6E9141.jpg=629x49)
 
 
 #### scaleQuantile(分位比例尺)
@@ -546,8 +540,7 @@ d3.select('svg')
 
 **效果图**
 
-
-![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/AD49AFB571F27382B24FF02264127D11.jpg =653x53)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/AD49AFB571F27382B24FF02264127D11.jpg=653x53)
 
 以上例子中定义域（排序过的）数组中的值被分为n块等大小的组（各分割点间数值不一定相同，但相隔两分割点内的定义域元素个数均相同），组内，其中n大小为值域中离散值的个数。
 
@@ -611,7 +604,6 @@ d3.select('svg')
 
 **效果图**
 
-
 ![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/80AAEE96189C177B6B55AB26F2876BFD.jpg)
 
 ### 输入输出均为离散值的比例尺
@@ -665,8 +657,7 @@ d3.select('svg')
 
 **效果图**
 
-
-![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/814C566470B70DD9842153B31DFE3371.jpg =641x36)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/814C566470B70DD9842153B31DFE3371.jpg=641x36)
 
 如果传入值没有存在于定义域中，比例尺实例会添加（push）到定义域中。
 
@@ -720,8 +711,7 @@ d3.select('svg')
 
 **第二个效果图**
 
-
-![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/2B72CCCD983037D48DA4BE8C84986679.jpg =652x49)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/2B72CCCD983037D48DA4BE8C84986679.jpg=652x49)
 
 #### scaleBand
 
@@ -788,8 +778,7 @@ d3.select('svg')
 
 **效果图**
 
-
-![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/58364E51BB965A3B373FF03AE903B378.jpg =256x88)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/58364E51BB965A3B373FF03AE903B378.jpg=256x88)
 
 #### scalePoint
 
@@ -830,8 +819,7 @@ d3.select('svg')
 
 **效果图**
 
-
-![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/8ADC1C01BC6EE4A96AFB7465D1BF70B1.jpg =636x42)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/8ADC1C01BC6EE4A96AFB7465D1BF70B1.jpg=636x42)
 
 上例中各点的间距可以通过`.step()`方法得到：
 
