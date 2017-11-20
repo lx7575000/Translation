@@ -32,7 +32,7 @@ myScale(3);   // returns 180
 ...
 myScale(10);  // returns 600
 ```
-![](resources/EC39D4E27AF6F426998A8A993E588E35.jpg)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/EC39D4E27AF6F426998A8A993E588E35.jpg)
 
 比例尺方法主要可用来将数据转换为视觉元素，例如坐标、长度、颜色等。
 
@@ -42,7 +42,7 @@ myScale(10);  // returns 600
   - 数值转换为坐标位置在0到200之间的折线图
   - 使用百分比转换为连续的颜色值
   - 转换为x轴的坐标值
-  
+
 
 ### 构建比例尺
 
@@ -68,14 +68,14 @@ const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 const scale = d3.scaleLinear()
 scale.domain([0, 10])
   .range([0, 500])
-  
+
 d3.select("svg")
   .selectAll('circle')
   .data(data)
   .enter().append('circle')
   .attr('r', 3)
   .attr('cx', d => scale(d))
-  
+
 d3.select('svg')
   .selectAll("text")
   .data(data)
@@ -86,7 +86,7 @@ d3.select('svg')
 ```
 
 **效果图**
-![](resources/77ABF4C7DE077DA3AABB50477118CB96.jpg)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/77ABF4C7DE077DA3AABB50477118CB96.jpg)
 
 ### 连续值（输入输出）的比例尺
 
@@ -102,7 +102,7 @@ d3.select('svg')
 const linearScale = d3.scaleLinear()
         .domain([0, 10])
         .range(['yellow', 'red'])
-        
+
 linearScale(0);   // returns "rgb(255, 255, 0)"
 linearScale(5);   // returns "rgb(255, 128, 0)"
 linearScale(10);  // returns "rgb(255, 0, 0)"
@@ -145,7 +145,7 @@ const data = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 const sqrtScale = d3.scaleSqrt()
 sqrtScale.domain(d3.extent(data))
           .range([0, 30])
-          
+
 const linearScale = d3.scaleLinear()
 linearScale.domain(d3.extent(data))
             .range([0, 700])
@@ -160,7 +160,7 @@ d3.select('svg')
 ```
 
 **效果图**
-![](resources/76B8DDF6B72ECDBE35D5E90BB815044E.jpg)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/76B8DDF6B72ECDBE35D5E90BB815044E.jpg)
 
 #### 对数比例尺（scaleLog）
 
@@ -170,7 +170,7 @@ d3.select('svg')
 const logScale = d3.scaleLog()
 logScale.domain([10, 100000])
   .range([0, 600])
-  
+
 logScale(10);     // returns 0
 logScale(100);    // returns 150
 logScale(1000);   // returns 300
@@ -182,7 +182,7 @@ const data = [10, 100, 1000, 10000, 100000]
 const logScale = d3.scaleLog()
 logScale.domain([10, 100000])
   .range([0, 600])
-  
+
 d3.select('svg')
   .selectAll('text')
   .data(data)
@@ -193,7 +193,7 @@ d3.select('svg')
 
 **效果图**
 
-![](resources/88115E5C690B5E7E771A6B8E117D6D32.jpg)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/88115E5C690B5E7E771A6B8E117D6D32.jpg)
 
 
 #### scaleTime
@@ -205,7 +205,7 @@ const timeScale = d3.scaleTime()
 timeScale
   .domain([new Date(2016, 0, 1), new Date(2017, 0, 1)])
   .range([0, 700])
-  
+
 timeScale(new Date(2016, 0, 1));   // returns 0
 timeScale(new Date(2016, 6, 1));   // returns 348.00...
 timeScale(new Date(2017, 0, 1));   // returns 700
@@ -216,7 +216,7 @@ const data = [new Date(2016, 0, 1), new Date(2016, 3, 1), new Date(2016, 6, 1), 
 const timeScale = d3.scaleTime()
   .domain([new Date(2016, 0, 1), new Date(2017, 0, 1)])
   .range([0, 700])
-  
+
 d3.select('svg')
 	.selectAll('circle')
 	.data(data)
@@ -243,7 +243,7 @@ d3.select('svg')
 
 **效果图**
 
-![IMAGE](resources/8BA5AA3083122EF3600EEE863BA2436F.jpg =814x60)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/8BA5AA3083122EF3600EEE863BA2436F.jpg=814x60)
 
 #### 顺序比例尺(scaleSwquential)
 
@@ -265,7 +265,7 @@ sequentialScale(100); // returns 'rgb(110, 64, 170)'
 const linearScale = d3.scaleLinear()
   .domain([0, 100])
   .range([0, 600])
-  
+
 const sequentialScale = d3.scaleSequential()
   .domain([0, 100])
   .interpolator(d3.interpolateRainbow)
@@ -283,7 +283,7 @@ d3.select('svg')
 
 **效果图**
 
-![IMAGE](resources/A3FD7BC43B87EE5CA1273F14486736FA.jpg =660x74)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/A3FD7BC43B87EE5CA1273F14486736FA.jpg=660x74)
 
 切记，插值器会决定输出范围，因此你不需要指定值域范围。下面我们会展示几个颜色插值器：
 
@@ -294,7 +294,7 @@ const linearScale = d3.scaleLinear()
 
 const sequentialScale = d3.scaleSequential()
 	.domain([0, 100]);
-	
+
 const interpolators = [
 	'interpolateViridis',
 	'interpolateInferno',
@@ -311,12 +311,12 @@ const data = d3.range(0, 100, 2) // 生成数组，0到100直接，数值间隔�
 function dots(d) {
   sequentialScale
     .interpolator(d3[d])
-  
+
   d3.select(this)
     .append('text')
     .attr('y', -12)
     .text(d)
-    
+
   d3.select(this)
     .selectAll('rect')
     .data(data)
@@ -334,10 +334,10 @@ d3.select('svg')
   .classed('interpolator', true)
   .attr('transform', (d, i) => `translate(0, ${i * 70})`)
   .each(dots)
- 
+
 ```
 
-![IMAGE](resources/B94D1E47287872078676C8004E533C6A.jpg =659x582)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/B94D1E47287872078676C8004E533C6A.jpg=659x582)
 
 
 ### 区间
@@ -376,7 +376,7 @@ const extent = d3.extent(data);
 const linearScale = d3.scaleLinear()
   .domain(extent)
   .range([0, 100]);
-  
+
 const axis = d3.axisBottom(linearScale)
 
 d3.select('svg')
@@ -384,7 +384,7 @@ d3.select('svg')
   .call(axis)
 ```
 **效果图**
-![IMAGE](resources/90C7A7FEB981E17F299A9DEE3F1D21AC.jpg =627x63)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/90C7A7FEB981E17F299A9DEE3F1D21AC.jpg=627x63)
 
 想你之所想，急你之所急。D3提供了`.nice()`方法会帮你把定义域数值范围弄的更平滑好看些。_切记， 每次更新domain时候，都要重新调用`nice`方法_
 
@@ -392,7 +392,7 @@ d3.select('svg')
 linearScale.nice()
 ```
 **效果图**
-![IMAGE](resources/00AC53CCB0E60DAE78601D008A330DD2.jpg =680x85)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/00AC53CCB0E60DAE78601D008A330DD2.jpg=680x85)
 
 #### 多区间（Multiple segments）
 `scaleLinear`,`scalePow`,`scaleSqrt`, `scaleLog`和`scaleTime`的作用域（domain）通常是由两个值（起始、终值）组成的。但现实应用场景中，我们会有用到需要传入多个值将作用域分为多个区间范围的需求。
@@ -412,11 +412,11 @@ linearScale(5);    // returns "rgb(128, 128, 255)"
 const xScale = d3.scaleLinear()
   .domain([-10 , 10])
   .range([0, 600])
-  
+
 const linearScale = d3.scaleLinear()
   .domain([-10, 0, 10])
   .range(['red', '#ddd', 'blue'])
-  
+
 const myData = [-10, -8, -6, -4, -2, 0, 2, 4, 6, 8, 10]
 
 d3.select('svg')
@@ -424,14 +424,14 @@ d3.select('svg')
   .attr("transform", 'translate(40, 40)')
   .selectAll('circle')
   .data(myData)
-  .enter().append('circle')  
+  .enter().append('circle')
   .attr('r', 10)
   .attr('cx', d => xScale(d))
   .style('fill', d => linearScale(d))
 ```
 **效果图**
 
-![IMAGE](resources/958F68E12E5B5EEDE95DB98FEBAB4257.jpg =661x59)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/958F68E12E5B5EEDE95DB98FEBAB4257.jpg=661x59)
 
 通常我们会使用多个段来区分正负值的情况（上面的例子），我们也可以使用更多的分块，只要作用域和值域具有相同的**区间个数**。
 
@@ -458,7 +458,7 @@ linearScale.invert(100);  // returns 10
 const quantizeScale = d3.scaleQuantize()
   .domain([0, 100])
   .range(['lightblue', 'orange', 'lightgreen', 'pink'])
-  
+
 quantizeScale(10);   // returns 'lightblue'
 quantizeScale(30);  // returns 'orange'
 quantizeScale(90);  // returns 'pink'
@@ -481,7 +481,7 @@ const quantizeScale = d3.scaleQuantize()
 const linearScale = d3.scaleLinear()
   .domain([0, 100])
   .range([0, 600])
-  
+
 const myData = d3.range(0, 100, 1)
 d3.select('svg')
   .selectAll('rect')
@@ -495,7 +495,7 @@ d3.select('svg')
 
 **效果图**
 
-![IMAGE](resources/D2D06F62089CA3DD9EBB213C9A6E9141.jpg =629x49)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/D2D06F62089CA3DD9EBB213C9A6E9141.jpg=629x49)
 
 
 #### scaleQuantile(分位比例尺)
@@ -522,11 +522,11 @@ quantileScale(65);  // returns 'lightgreen'
 const scaleQuantile = d3.scaleQuantile()
   .domain(myData)
   .range(['lightblue', 'orange', 'lightgreen'])
-  
+
 const linearScale = d3.linearScale()
   .domain([0 , 100])
   .range([0, 600])
-  
+
 const myData = [0, 5, 7, 10, 20, 30, 35, 40, 60, 62, 65, 70, 80, 90, 100]
 
 d3.select('svg')
@@ -540,7 +540,7 @@ d3.select('svg')
 
 **效果图**
 
-![IMAGE](resources/AD49AFB571F27382B24FF02264127D11.jpg =653x53)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/AD49AFB571F27382B24FF02264127D11.jpg=653x53)
 
 以上例子中定义域（排序过的）数组中的值被分为n块等大小的组（各分割点间数值不一定相同，但相隔两分割点内的定义域元素个数均相同），组内，其中n大小为值域中离散值的个数。
 
@@ -548,7 +548,7 @@ d3.select('svg')
   - 首五项被映射为‘lightblue’
   - 中间五项被映射为‘orange’
   - 最后五项被映射为‘lightgreen’
-  
+
 区间分割点可以通过`.quantiles()`得到：
 
 ```js
@@ -567,7 +567,7 @@ quantileScale.quantiles();  // returns [26.66..., 63]
   - 0 ≤ u < 50 映射为 ‘lightblue’
   - 50 ≤ u < 100 映射为 ‘orange’
   - u ≥ 100 映射为 ‘#ccc’
-  
+
 ```js
 const thresholdScale = d3.scaleThreshold()
   .domain([0, 50, 100])
@@ -589,7 +589,7 @@ const thresholdScale = d3.scaleThreshold()
 const linearScale = d3.linearScale()
   .domain([0 , 100])
   .range([0, 600])
-  
+
 const data = d3.range(-10, 110, 2)
 
 d3.select('svg')
@@ -604,7 +604,7 @@ d3.select('svg')
 
 **效果图**
 
-![](resources/80AAEE96189C177B6B55AB26F2876BFD.jpg)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/80AAEE96189C177B6B55AB26F2876BFD.jpg)
 
 ### 输入输出均为离散值的比例尺
 
@@ -657,7 +657,7 @@ d3.select('svg')
 
 **效果图**
 
-![IMAGE](resources/814C566470B70DD9842153B31DFE3371.jpg =641x36)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/814C566470B70DD9842153B31DFE3371.jpg=641x36)
 
 如果传入值没有存在于定义域中，比例尺实例会添加（push）到定义域中。
 
@@ -686,7 +686,7 @@ const ordinalScale = d3.scaleOrdinal()
 const ordinalScale = d3.scaleOrdinal()
   .domain(myData)
   .range(d3.schemePaired);
-  
+
 const myData = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 const linearScale = d3.scaleLinear()
@@ -711,7 +711,7 @@ d3.select('svg')
 
 **第二个效果图**
 
-![IMAGE](resources/2B72CCCD983037D48DA4BE8C84986679.jpg =652x49)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/2B72CCCD983037D48DA4BE8C84986679.jpg=652x49)
 
 #### scaleBand
 
@@ -738,7 +738,7 @@ bandScale.bandWidth() // return 40
 有两种方法来设定各段之间的间距：
   - `paddingInner`: 指定各段（两个柱子）之间的间距值（百分比）。
   - `paddingOuter`: 指定各段（两个柱子之间和首/末柱子左/右两边的）间距值（百分比）。
-  
+
 ```js
 bandScale.paddingInner(0.05);
 
@@ -761,7 +761,7 @@ const myData = [
 	{day : 'Wed', value: 30},
 	{day : 'Thu', value: 60},
 	{day : 'Fri', value: 30}
-]	
+]
 
 d3.select('svg')
   .selectAll('rect')
@@ -778,7 +778,7 @@ d3.select('svg')
 
 **效果图**
 
-![IMAGE](resources/58364E51BB965A3B373FF03AE903B378.jpg =256x88)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/58364E51BB965A3B373FF03AE903B378.jpg=256x88)
 
 #### scalePoint
 
@@ -800,7 +800,7 @@ pointScale('Fri');  // returns 500
 const pointScale = d3.scalePoint()
   .domain(['Mon', 'Tue', 'Wed', 'Thu', 'Fri'])
   .range([0, 500]);
-  
+
 const myData = [
 	{day : 'Mon', value: 10},
 	{day : 'Tue', value: 40},
@@ -819,7 +819,7 @@ d3.select('svg')
 
 **效果图**
 
-![IMAGE](resources/8ADC1C01BC6EE4A96AFB7465D1BF70B1.jpg =636x42)
+![](https://github.com/lx7575000/Translation/blob/master/All%20About%20Scale/resources/8ADC1C01BC6EE4A96AFB7465D1BF70B1.jpg=636x42)
 
 上例中各点的间距可以通过`.step()`方法得到：
 
