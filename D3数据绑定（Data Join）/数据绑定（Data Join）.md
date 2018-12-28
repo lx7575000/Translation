@@ -57,7 +57,7 @@ d3.selectAll('circle')
 
 如下图为使用数组数据中各元素的`score`值来赋值`circle`元素的半径`r`属性。
 
-![IMAGE](resources/1542C02CCA35201C28B20FC678D63B4F.jpg =596x154)
+![IMAGE](resources/1542C02CCA35201C28B20FC678D63B4F.jpg)
 
 **🌰代码**
 
@@ -224,7 +224,7 @@ s.attr('r', function(d) {
   })
 ```
 
-![IMAGE](resources/AADA008DF9FC795C84F53C6E584FC17F.jpg =634x132)
+![IMAGE](resources/AADA008DF9FC795C84F53C6E584FC17F.jpg)
 
 #### 对象数组
 
@@ -260,7 +260,7 @@ s.attr('r', function(d) {
 
 **效果图**
 
-![IMAGE](resources/B5954156DB042D466A47460E429A1AFB.jpg =751x177)
+![IMAGE](resources/B5954156DB042D466A47460E429A1AFB.jpg)
 
 
 当然我们不仅仅局限于修改`circle`元素，如果我们有`rect`、`text`类型的元素，我们也可以构建一个简单的柱状图。
@@ -300,7 +300,7 @@ d3.selectAll('text')
 
 **效果图**
 
-![IMAGE](resources/04DEC69A3C2DEDA5A4D53498E58E34A8.jpg =663x134)
+![IMAGE](resources/04DEC69A3C2DEDA5A4D53498E58E34A8.jpg)
 
 ### `.data()`具体机制
 
